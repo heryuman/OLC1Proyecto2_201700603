@@ -1,0 +1,215 @@
+#Gramatica
+
+# START WITH
+
+INICIO=>INICIO STARTWITH
+        |STARTWITH
+
+
+
+
+STARTWITH=>start whit IDENTIFICADOR ()ptycoma
+        |start whit IDENTIFICADOR(LISTAVALORES)ptycoma
+
+LISTAVALORES => LISTAVALORES,EXP
+        |EXP
+
+INSTRUCCIONES=> INSTRUCCIONES INSTRUCCION
+            |INSTRUCCION
+
+INSTRUCCION=> DECLARACIONES
+                |ASIGNACIONES
+                |INCREMENTO ptycoma
+                |DECREMENTO ptycoma
+                |EDD
+                |SENTENCIAIF
+                |SENTENCIASWITCH
+                |SENTENCIAWHILE
+                |SENTENCIAFOR
+                |SENTENCIADOWHILE
+                |SENTBREAK
+                |SENTCONTINUE
+                |SENTRETURN
+                |FUNCIONES
+                |METODOS
+                |LLAMADAS
+                |PRINT
+                |TOUPPER
+                |TOLOWER
+                
+                
+
+DECLARACIONES=> TIPO LISTAIDS ptycoma
+        |TIPO LISTAIDS=EXP ptycoma
+        |TIPO IDENTIFICADOR = CASTEO ptycoma
+        
+        
+
+LISTAIDS=> LISTAIDS,IDENTIFICADOR
+        |IDENTIFICADOR
+
+ASIGNACIONES => IDENTIFICADOR = EXP ptycoma
+        |IDENTIFICADOR= CASTEO ptycoma
+       
+       
+
+TIPO=> Int
+     | Double
+     | Boolean
+     | Char
+     | String
+
+CASTEO=> (TIPO) EXP
+
+INCREMENTO=>IDENTIFICADOR ++ 
+        |IDENTIFICADOR = EXP ++ 
+
+DECREMENTO=> IDENTIFICADOR -- 
+        |IDENTIFICADOR = EXP -- 
+
+EDD=> VECTORES
+        |LISTAS
+
+#VECTORES=> VECTORES VECTOR
+#        |VECTOR
+
+VECTOR=>DECLAVECTOR
+        |ACCESVECTOR
+        |MODVECTOR
+
+DECLAVECTOR=> TIPO IDENTIFICADOR [] = new TIPO [EXP] ptycoma
+                |TIPO IDENTIFICADOR []={ LISTAVALORES} ptycoma
+
+ACCESVECTOR=> IDENTIFICADOR[EXP]
+
+MODVECTOR=>IDENTIFICADOR [EXP]=EXP ptycoma
+
+
+
+#LISTAS=> LISTAS LISTA
+#      |LISTA
+
+LISTA=>DECLALISTA
+        |APPEND
+        |GET
+        |MODLISTA
+
+DECLALISTA=> DynamicList <TIPO> IDENTIFICADOR = new DynamicList <TIPO> ptycoma
+
+APPEND => append (IDENTIFICADOR,EXP)ptycoma
+
+GET => getValue (IDENTIFICADOR,EXP) ptycoma
+
+MODLISTA=> setValue(IDENTIFICADOR,EXP,EXP) ptycoma
+
+SENTENCIAIF=>if ( EXP ) { INSTRUCCIONES }
+        |if ( EXP ) { INSTRUCCIONES }else { INSTRUCCIONES }
+        |if ( EXP ) { INSTRUCCIONES } else SENTENCIAIF   
+        
+
+SENTENCIASWITCH=>switch ( EXP ){ CASOS }                              
+           
+
+CASOS=>CASOS CASO                                                                                             
+
+    |CASO                                                                                                           
+    
+CASO=> case EXP dospuntos INSTRUCCIONES                                                             
+
+      |default dospuntos INSTRUCCIONES  
+      
+
+SENTENCIAWHILE=> while ( EXP ) { INSTRUCCIONES }
+            
+SENTENCIADOWHILE=> do { INSTRUCCIONES } while ( EXP ) ptycoma 
+                      
+
+SENTENCIAFOR=>for ( (DECLARACIONES|ASIGNACIONES)   EXP ptycoma  CONTROL ) { INSTRUCCIONES }
+                                                          
+CONTROL=>INCREMENTO
+        |DECREMENTO                                     
+
+      
+SENTBREAK=> break ptycoma
+SENTCONTINUE => continue ptycoma
+
+SENTRETURN=> return EXP ptycoma
+        |return ptycoma
+
+FUNCIONES=> TIPO IDENTIFICADOR (PARAMETROS){ INSTRUCCIONES }
+
+PARAMETROS=> PARAMETROS,TIPO IDENTIFICADOR
+        |TIPO IDENTIFICADOR
+
+METODOS => void IDENTIFICADOR (PARAMETROS){INSTRUCCIONES}
+
+LLAMADAS => IDENTIFICADOR (LISTAIDS) ptycoma
+        | IDENTIFICADOR () ptycoma
+
+
+
+PRINT => WriteLine (EXP) ptycoma
+
+TOLOWER => toLower(EXP) 
+
+TOUPPER => toUpper(EXP) 
+
+NATIVAS=>LENGTH
+        |TRUNCATE
+        |ROUND
+        |TIPODE
+        |TOSTRING
+        |TOCHARARRAY
+        
+
+
+LENGTH => length(VALOR)
+
+VALOR => EDD
+        |cadena
+
+TRUNCATE => truncate (EXP)
+
+ROUND => round (EXP)
+
+TIPODE => typeof(EXP)
+
+TOSTRING => toString(EXP)
+
+TOCHARARRAY => toCharArray(VALOR)
+
+
+EXP=>(EXP)                                        
+|EXP menos EXP                                                        
+|EXP por EXP                                                          
+|EXP div EXP                                                         
+|EXP menorque EXP                                                     
+|EXP mayorque EXP                                                     
+|EXP mayorigual EXP                                                   
+|EXP menorigual EXP                                                   
+|EXP modulo EXP                                                       
+|EXP igualacion EXP                                                   
+|EXP potencia  EXP                                                    
+|EXP and EXP                                                       
+|EXP or EXP                                                        
+|EXP diferente EXP                                                    
+|menos EXP                                                               
+|not EXP                                                            
+|true                                                                
+|false                                                                     
+|cadena                                                                   
+| id                                                                         
+|decimales                                                                 
+|entero                                                                   
+|comillad comillad
+|EDD
+|char
+|NATIVAS                                                      
+
+
+
+
+
+
+
+

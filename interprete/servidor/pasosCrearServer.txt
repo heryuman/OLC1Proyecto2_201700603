@@ -1,0 +1,21 @@
+1 npm init  para iniciar el packcage json
+    llenamos todos los datos necesarios como el nombre del srver
+    nombre del autor, repositorio, y una descripcion 
+
+2 npm add express
+
+3 npm add  -D typescript @types/express @types/express @types/node
+  se agregan las dependencias para indicar que nuestro servidor traajara
+  con ts 
+
+4 npm add -D ts-node nodemon
+5 npm install typescript
+6 se agrega un script en el apartado script de packcage.json llamado tsc con la clave tsc
+7 npm run tsc -- --init
+8 npm i cors --save
+9 editar la salida en tsconfig.json  el apartado  "outDir": "./" por  "outDir": "./JSgenerate"
+10 creamos una carptea app en la carptea servidor  dentro de app creamos el archivo index.ts 
+11
+
+NOTA: el add sirve para indicarle que se estaran agregando al node_modules
+
