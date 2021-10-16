@@ -1,3 +1,4 @@
+import Errores from "../../Ast/Errores";
 import Nodo from "../../Ast/Nodo";
 import Controlador from "../../Controlador";
 import { Expresion } from "../../Interfaces/Expresion";
@@ -45,7 +46,15 @@ export default class Relacionales extends Operacion implements Expresion{
                     if(tipo_exp2 ==tipo.ENTERO || tipo_exp2 ==tipo.DOBLE || tipo_exp2== tipo.CARACTER){
 
                         return tipo.BOOLEANO;
-                    }else{ return tipo.ERROR;}
+
+                    }else{
+
+                         let error= new Errores("Semantico","la comparacion realizada no se realiza entre tipos permitidos ",this.linea,this.col);
+                         controlador.errores.push(error);
+                         controlador.append(`**Error:Semantico,la comparacion realizada no se produce entre tipos permitidos, en la linea ${this.linea} y columna: ${this.col}`);
+                         return tipo.ERROR;
+                         
+                        }
                 }else if(tipo_exp1 ==tipo.DOBLE){
 
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2==tipo.CARACTER){
@@ -63,8 +72,7 @@ export default class Relacionales extends Operacion implements Expresion{
                     if(tipo_exp2 == tipo.CADENA){
                         return tipo.BOOLEANO;
                     }
-
-                    
+ 
                 }
 
                 break;

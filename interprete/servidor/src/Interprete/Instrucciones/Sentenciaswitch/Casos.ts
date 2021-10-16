@@ -36,10 +36,11 @@ export default class Caso implements Instruccion{
         
             for (let ins of this.L_instrucciones){
 
-                let res = ins.ejecutar(controlador,ts_local);
-                if(ins instanceof Detener || res instanceof Detener){
+                let res:any = ins.ejecutar(controlador,ts_local);
+                if( res instanceof Detener){
                     console.log("hay detener");
                     this.parar=true;
+                    return res;
  
                 }
                

@@ -30,8 +30,8 @@ export default class Sentenciaswitch implements Instruccion{
 
     ejecutar(controlador:Controlador,ts:TablaSimbolos){
         console.log("dentro del switch");
-        
-
+        let ts_local=new TablaSimbolos(ts);
+        let siguiente_caso=false;
         for (let cases of this.casos){
 
                 if(cases.default != true){
@@ -47,21 +47,42 @@ export default class Sentenciaswitch implements Instruccion{
                     console.log(tipo_condicion);
                     if(tipo_condicion==tipo_condicion_caso){
 
-                        if(val_condicion == val_condicion_case ){
+                        if(val_condicion == val_condicion_case){
+                                let res:any= cases.ejecutar(controlador,ts_local);
+                                if (res instanceof Detener){
+                                    return res;
+                                }else{
 
-                            cases.ejecutar(controlador,ts);
-                            if(cases.parar==true){
-
-                                break;
+                                    siguiente_caso=true;
+                                }
                             }
-       
-                       
-                       }
+                        else{
+
+                            if(siguiente_caso==true){
+
+                                let res:any= cases.ejecutar(controlador,ts_local);
+                                        if (res instanceof Detener){
+                                            siguiente_caso=false;
+                                            return res;
+                                        }else{
+        
+                                            siguiente_caso=true;
+                                        }
+        
+                            }
+                        }
+                        
+
                     }else{
 
-                    let error = new Errores("Semantico", `El tipo de de la condicion del case [${val_condicion_case}], no corresponde al tipo de la condicion del switch.`, this.linea, this.columna);
-                    controlador.errores.push(error);
-                    controlador.append(` *** ERROR: Semantico, El tipo de de la condicion del case [${val_condicion_case}], no corresponde al tipo de la condicion del switch [${val_condicion}]. en la fila ${this.linea} y columna ${this.columna}`);
+                       {
+
+                            let error = new Errores("Semantico", `El tipo de de la condicion del case [${val_condicion_case}], no corresponde al tipo de la condicion del switch.`, this.linea, this.columna);
+                            controlador.errores.push(error);
+                            controlador.append(` *** ERROR: Semantico, El tipo de de la condicion del case [${val_condicion_case}], no corresponde al tipo de la condicion del switch [${val_condicion}]. en la fila ${this.linea} y columna ${this.columna}`);
+                    
+                        }
+
                     
                     }
 
@@ -69,7 +90,11 @@ export default class Sentenciaswitch implements Instruccion{
                     
                 }else{
 
-                    cases.ejecutar(controlador,ts);
+                   let res:any= cases.ejecutar(controlador,ts);
+                   if(res instanceof Detener){
+
+                    return res;
+                   }
                 }
             
 

@@ -5,7 +5,7 @@ import { Instruccion } from "../Interfaces/Instruccion";
 import TablaSimbolos from "../TablaSimbolos/TablaSimbolos";
 import { tipo } from "../TablaSimbolos/Tipo";
 import Detener from "./SentBreak";
-import Continue from "./Sentcontinue";
+import Continue from "./sent_transfer/Sentcontinue";
 
 
 

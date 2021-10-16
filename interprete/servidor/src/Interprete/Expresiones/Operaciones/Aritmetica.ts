@@ -4,6 +4,7 @@ import { Expresion } from "../../Interfaces/Expresion";
 import TablaSimbolos from "../../TablaSimbolos/TablaSimbolos";
 import { tipo } from "../../TablaSimbolos/Tipo";
 import Operacion, { Operador } from "./Operacion";
+import Errores from "../../Ast/Errores";
 
 export default class Aritmetica extends Operacion implements Expresion{
 
@@ -68,12 +69,24 @@ export default class Aritmetica extends Operacion implements Expresion{
                         return tipo.DOBLE;
                     }else if(tipo_exp2 == tipo.CADENA){
                         return tipo.CADENA;
+                    }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
                     }
+
                 }else if(tipo_exp1 == tipo.DOBLE){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE|| tipo_exp2 == tipo.BOOLEANO || tipo_exp2 == tipo.CARACTER){
                         return tipo.DOBLE;
                     }else if(tipo_exp2 == tipo.CADENA){
                         return tipo.CADENA; // 1.2 + "hola" -> "1.2hola"
+                    }
+                    else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
                     }
                 }else if(tipo_exp1 == tipo.BOOLEANO){
                     if(tipo_exp2 == tipo.ENTERO){
@@ -83,7 +96,11 @@ export default class Aritmetica extends Operacion implements Expresion{
                     }else if(tipo_exp2 == tipo.CADENA){
                         return tipo.CADENA; // true + "hola" -> "truehola"
                     }else{
-                        return tipo.ERROR;
+                            let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                            controlador.errores.push(error);
+                            controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
+                        
+                            return tipo.ERROR;
                     }
                 }else if(tipo_exp1 == tipo.CARACTER){
                     if(tipo_exp2 == tipo.ENTERO){
@@ -93,14 +110,29 @@ export default class Aritmetica extends Operacion implements Expresion{
                     }else if(tipo_exp2 == tipo.CADENA || tipo_exp2 == tipo.CARACTER){
                         return tipo.CADENA; 
                     }else{
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
+                        
                         return tipo.ERROR;
                     }
                 }else if(tipo_exp1 == tipo.CADENA){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE || tipo_exp2 == tipo.BOOLEANO || tipo_exp2 == tipo.CARACTER || tipo_exp2 == tipo.CADENA){
                         return tipo.CADENA;
                     }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
+                    
                         return tipo.ERROR;
                     }
+                }else{
+
+                    let error= new Errores("Semantico","El tipo de la expresion izquierda no es un tipo aceptado por el lenguaje",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error: Semantico, el tipo de la expresion izquierda no es un tipo aceptado por el lenguaje, en la linea ${this.linea} y columna: ${this.col}`);
+                    return tipo.ERROR;
                 }
                 break;
             case Operador.RESTA:
@@ -110,9 +142,69 @@ export default class Aritmetica extends Operacion implements Expresion{
                     }else if(tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
                     }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
+                    
                         return tipo.ERROR;
                     }
                 }// TODO: Hacer las siguientes validaciones revisando la tabla para RESTA en el enunciado 
+                else if(tipo_exp1 == tipo.DOBLE){
+                    if(tipo_exp2== tipo.ENTERO || tipo_exp2== tipo.DOBLE || tipo_exp2 == tipo.CARACTER || tipo_exp2 == tipo.BOOLEANO){
+
+                        return tipo.DOBLE;
+                    }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
+                    
+                        return tipo.ERROR;
+                    }
+                    
+                }
+                else if(tipo_exp1 == tipo.BOOLEANO){
+                    if(tipo_exp2 == tipo.ENTERO){
+                        return tipo.ENTERO;
+                    }
+                    else if(tipo_exp2== tipo.DOBLE){
+
+                        return tipo.DOBLE
+                    }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
+                    
+                        return tipo.ERROR;
+                    }
+                }
+                else if(tipo_exp1 == tipo.CARACTER){
+
+                    if(tipo_exp2 == tipo.ENTERO){
+                        return tipo.ENTERO;
+                    }
+                    else if(tipo_exp2== tipo.DOBLE){
+
+                        return tipo.DOBLE
+                    }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
+                    
+                        return tipo.ERROR;
+                    }
+
+                }else{
+
+                    let error= new Errores("Semantico","El tipo de la expresion izquierda no es un tipo aceptado por el lenguaje",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error: Semantico, el tipo de la expresion izquierda no es un tipo aceptado por el lenguaje, en la linea ${this.linea} y columna: ${this.col}`);
+                    return tipo.ERROR;
+                }
+
                 break;
             case Operador.MULTI:
                 if(tipo_exp1 == tipo.ENTERO){
@@ -121,29 +213,98 @@ export default class Aritmetica extends Operacion implements Expresion{
                     }else if(tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
                     }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
                         return tipo.ERROR;
                     }
                 }// TODO: Hacer las siguientes validaciones revisando la tabla para MULTIPLICACION en el enunciado 
-                break;
-            case Operador.DIV:
-                if(tipo_exp1 == tipo.ENTERO){
+
+                else if(tipo_exp1 ==tipo.DOBLE){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE || tipo_exp2 == tipo.CARACTER){
                         return tipo.DOBLE;
                     }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
                         return tipo.ERROR;
                     }
-                }// TODO: Hacer las siguientes validaciones revisando la tabla para DIVISION en el enunciado 
-                break;
-            case Operador.MOD:
-                if(tipo_exp1 == tipo.ENTERO){
-                    if(tipo_exp2 == tipo.ENTERO ){
+                }
+
+                else if(tipo_exp1 == tipo.CARACTER){
+                    if(tipo_exp2 == tipo.ENTERO){
                         return tipo.ENTERO;
                     }else if(tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
                     }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
+                        return tipo.ERROR;
+                    }
+                }
+                else{
+
+                    let error= new Errores("Semantico","El tipo de la expresion izquierda no es un tipo aceptado por el lenguaje",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error: Semantico, el tipo de la expresion izquierda no es un tipo aceptado por el lenguaje, en la linea ${this.linea} y columna: ${this.col}`);
+                    return tipo.ERROR;
+                }
+                break;
+            case Operador.DIV:
+                if(tipo_exp1 == tipo.ENTERO || tipo_exp1 ==tipo.DOBLE){
+                    if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE || tipo_exp2 == tipo.CARACTER){
+                        return tipo.DOBLE;
+                    }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
+                        return tipo.ERROR;
+                    }
+                }// TODO: Hacer las siguientes validaciones revisando la tabla para DIVISION en el enunciado 
+                else if(tipo_exp1 == tipo.CARACTER){
+                    if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE){
+                        return tipo.DOBLE;
+                    }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
+                        return tipo.ERROR;
+                    }
+                }
+                else{
+
+                    let error= new Errores("Semantico","El tipo de la expresion izquierda no es un tipo aceptado por el lenguaje",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error: Semantico, el tipo de la expresion izquierda no es un tipo aceptado por el lenguaje, en la linea ${this.linea} y columna: ${this.col}`);
+                    return tipo.ERROR;
+                }
+
+                break;
+            case Operador.MOD:
+                if(tipo_exp1 == tipo.ENTERO || tipo_exp1 == tipo.DOBLE){
+                    if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE){
+                        return tipo.DOBLE;
+                    }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
                         return tipo.ERROR;
                     }
                 }// TODO: Hacer las siguientes validaciones revisando la tabla para MOD en el enunciado 
+                else{
+
+                    let error= new Errores("Semantico","El tipo de la expresion izquierda no es un tipo aceptado por el lenguaje",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error: Semantico, el tipo de la expresion izquierda no es un tipo aceptado por el lenguaje, en la linea ${this.linea} y columna: ${this.col}`);
+                    return tipo.ERROR;
+                }
                 break;
             case Operador.POT:
                 if(tipo_exp1 == tipo.ENTERO){
@@ -152,9 +313,30 @@ export default class Aritmetica extends Operacion implements Expresion{
                     }else if(tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
                     }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
                         return tipo.ERROR;
                     }
                 }// TODO: Hacer las siguientes validaciones revisando la tabla para POT en el enunciado 
+                else if(tipo_exp1 ==tipo.DOBLE){
+                    if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE){
+                        return tipo.DOBLE;
+                    }else{
+
+                        let error= new Errores("Semantico","El tipo de la expresion derecha no es compatible con la expresion izquierda",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error: Semantico, el tipo de la expresion derecha no es compatible con la expresion izquierda, en la linea ${this.linea} y columna: ${this.col}`);
+                        return tipo.ERROR;
+                    }
+                }else{
+
+                    let error= new Errores("Semantico","El tipo de la expresion izquierda no es un tipo aceptado por el lenguaje",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error: Semantico, el tipo de la expresion izquierda no es un tipo aceptado por el lenguaje, en la linea ${this.linea} y columna: ${this.col}`);
+                    return tipo.ERROR;
+                }
                 break;
             case Operador.UNARIO:
                 if(tipo_exp1 == tipo.ENTERO){
@@ -162,6 +344,10 @@ export default class Aritmetica extends Operacion implements Expresion{
                 }else if(tipo_exp1 == tipo.DOBLE){
                     return tipo.DOBLE;
                 }else{
+
+                    let error= new Errores("Semantico","El tipo de la expresion izquierda no es un tipo aceptado por el lenguaje",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error: Semantico, el tipo de la expresion izquierda no es un tipo aceptado por el lenguaje, en la linea ${this.linea} y columna: ${this.col}`);
                     return tipo.ERROR;
                 }
                 break;    
@@ -275,6 +461,7 @@ export default class Aritmetica extends Operacion implements Expresion{
                     }else if(tipo_exp2 == tipo.CARACTER){
                         return valor_exp1 + valor_exp2; //'A' + 'A' -> AA
                     }else if(tipo_exp2 == tipo.CADENA){
+                        console.log(valor_exp1+valor_exp2);
                         return valor_exp1 + valor_exp2; //'A' + "hola" -> "Ahola"
                     }else{
                         //TODO: reportar error semantico
@@ -308,7 +495,9 @@ export default class Aritmetica extends Operacion implements Expresion{
                         //reportar error semantico
                         return null;
                     }
-                }// TODO: Hacer las siguientes validaciones revisando la tabla para RESTA en el enunciado 
+                }// TODO: Hacer las siguientes validaciones revisando la tabla para RESTA en el enunciado aqui continuo
+                
+
                 break;
             case Operador.MULTI:
                 if(tipo_exp1 == tipo.ENTERO){

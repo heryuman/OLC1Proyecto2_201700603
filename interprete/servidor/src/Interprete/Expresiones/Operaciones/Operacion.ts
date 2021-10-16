@@ -21,6 +21,8 @@ export enum Operador{
     OR,
     AND,
     NOT,
+    INCREMENTO,
+    DECREMENTO,
     X
 
 }
@@ -113,7 +115,17 @@ export default class Operacion implements Expresion {
 
             return Operador.UNARIO;
 
-        }else {
+        }else if(signo_operador == '++'){
+
+            return Operador.INCREMENTO;
+
+        }else if(signo_operador == '--'){
+
+            return Operador.DECREMENTO;
+
+        }
+        
+        else {
 
             return Operador.X;
         }
