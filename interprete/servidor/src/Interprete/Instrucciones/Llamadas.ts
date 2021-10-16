@@ -92,7 +92,6 @@ export default class Llamadas implements Instruccion{
                                 iguales=true;
                             }
 
-
                         }
                     }
 
@@ -102,26 +101,11 @@ export default class Llamadas implements Instruccion{
                 if(iguales== true){
                     console.log("iguales: "+iguales)
                     console.log("ejecuta instrucciones de la func."+this.id_llamada)
-                    for (let inst of simbol.valor){
-                        console.log("tam lista instruccs: "+simbol.valor.length)
-                        let res=inst.ejecutar(controlador,ts_local);
+                    simbol.valor.ts=ts_local
 
-                        if (res instanceof Sent_return){
+                    for (let ins of simbol.valor.L_inst){
 
-                            console.log("encuentra return");
-
-                            if(res.expresion!=null){
-
-                            
-    
-                                 
-                                    res.ejecutar(controlador,ts_local);
-                                  
-                                   
-                            }
-    
-                            
-                        }
+                        ins.ejecutar(controlador,simbol.valor.ts);
                     }
 
                  

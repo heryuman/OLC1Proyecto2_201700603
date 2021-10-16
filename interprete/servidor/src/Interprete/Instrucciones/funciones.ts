@@ -6,6 +6,7 @@ import Simbolo from "../TablaSimbolos/Simbolos";
 import TablaSimbolos from "../TablaSimbolos/TablaSimbolos";
 import Tipo, { tipo } from "../TablaSimbolos/Tipo";
 import Declaracion from "./Declaracion";
+import objfunc from "./objfunc";
 import parametro from "./parametro";
 import Sent_return from "./sent_transfer/Sent_return";
 
@@ -32,24 +33,28 @@ export default class Funciones implements Instruccion{
     ejecutar(controlador:Controlador,ts:TablaSimbolos){
         let ts_local= new TablaSimbolos(ts);
 
-        if(ts.existeEnActual(this.id_func)){
-            let error= new Errores("Semantico",`el id  ${this.id_func} ya existe en el entorno actual, por lo que no se puede declarar`,this.linea,this.columna);
+        if(ts.existe(this.id_func)){//verifca que el id e la funcion no exista en los ts, si existe regresa un error semantico
+            let error= new Errores("Semantico",`el id  ${this.id_func} ya ha sido usado, por lo que no se puede declarar`,this.linea,this.columna);
             controlador.errores.push(error);
-            controlador.append(` *** ERROR: Semantico, el id  ${this.id_func} ya existe en el entorno actual, por lo que no se puede declarar. En la linea ${this.linea} y columna ${this.columna}`)
+            controlador.append(` *** ERROR: Semantico, el id  ${this.id_func} ya ha sido usado, por lo que no se puede declarar. En la linea ${this.linea} y columna ${this.columna}`)
             return tipo.ERROR;
 
         }else{  
-                var Lista_simbolos:Array<Simbolo>=[];
+
+                var Lista_simbolos:Array<Simbolo>=[];// lista donde se almasenaran los simbolos de la lista de parametros
                 for (let parametro of this.listaParametros){
 
-                  let nuevoParametro= new Simbolo(6,parametro.tipo,parametro.id,null);
+                  let nuevoParametro= new Simbolo(6,parametro.tipo,parametro.id,null);// se crea un nuevo simbolo de parametro y se almacena en la lista
+                  ts_local.agregar(parametro.id,nuevoParametro);
                   Lista_simbolos.push(nuevoParametro);
                 }
 
-                let nuevo_simbolo_func= new Simbolo(2,this.type,this.id_func,this.ListaInstrucciones,Lista_simbolos,false);
-                ts.agregar(this.id_func,nuevo_simbolo_func);
+                let objfun=new objfunc(ts_local,this.ListaInstrucciones)
 
-                
+                let nuevo_simbolo_func= new Simbolo(2,this.type,this.id_func,objfun,Lista_simbolos,false); // se crea un nuevo simbolo de funcion 
+                ts.agregar(this.id_func,nuevo_simbolo_func);// se agrega al 
+
+               
         }
        
   
@@ -63,4 +68,6 @@ export default class Funciones implements Instruccion{
 
         throw new Error("Method not implemented.");
     }
+
+    
 }
