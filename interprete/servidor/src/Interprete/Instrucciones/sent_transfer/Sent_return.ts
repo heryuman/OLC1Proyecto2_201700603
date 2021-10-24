@@ -19,11 +19,11 @@ export default class Sent_return implements Instruccion{
 
             let valor= this.expresion.getValor(controlador,ts);
 
-            return this;
+            return valor;
             
         }else{
 
-            return this;
+             this;
         }
 
     }

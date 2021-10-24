@@ -6,6 +6,7 @@ import { Instruccion } from "../../Interfaces/Instruccion";
 import TablaSimbolos from "../../TablaSimbolos/TablaSimbolos";
 import { tipo } from "../../TablaSimbolos/Tipo";
 import Detener from "../SentBreak";
+import Continue from "../sent_transfer/Sentcontinue";
 import Caso from "./Casos";
 
 
@@ -49,6 +50,15 @@ export default class Sentenciaswitch implements Instruccion{
 
                         if(val_condicion == val_condicion_case){
                                 let res:any= cases.ejecutar(controlador,ts_local);
+
+                                if(res instanceof Continue){
+
+                                    let error = new Errores("Semantico"," la palabra continue no corresponde a la estructura de la instruccion Swithc",this.linea,this.columna);
+                                    controlador.errores.push(error);
+                                    controlador.append(`**Error:semántico, en la instruccion Switch en la linea: ${this.linea} y columna: ${this.columna}`);
+                                    return tipo.ERROR;
+                                }
+
                                 if (res instanceof Detener){
                                     return res;
                                 }else{
@@ -61,6 +71,14 @@ export default class Sentenciaswitch implements Instruccion{
                             if(siguiente_caso==true){
 
                                 let res:any= cases.ejecutar(controlador,ts_local);
+
+                                if(res instanceof Continue){
+
+                                    let error = new Errores("Semantico"," la palabra continue no corresponde a la estructura de la instruccion Swithc",this.linea,this.columna);
+                                    controlador.errores.push(error);
+                                    controlador.append(`**Error:semántico, en la instruccion Switch en la linea: ${this.linea} y columna: ${this.columna}`);
+                                    return tipo.ERROR;
+                                }
                                         if (res instanceof Detener){
                                             siguiente_caso=false;
                                             return res;

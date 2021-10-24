@@ -1,3 +1,7 @@
+import Nodo from "../Ast/Nodo";
+import Controlador from "../Controlador";
+import { Instruccion } from "../Interfaces/Instruccion";
+import TablaSimbolos from "../TablaSimbolos/TablaSimbolos";
 import Tipo, { tipo } from "../TablaSimbolos/Tipo";
 
 
@@ -12,4 +16,6 @@ export default class parametro{
         this.tipo=tipo;
         this.id=id;
     }
+
+    
 }

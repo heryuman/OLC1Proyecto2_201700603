@@ -39,7 +39,7 @@ function sendData(){
 
     }).then(res=>res.json()).then(data=>{console.log(data.consola)
     
-        document.getElementById('consolas').value+=data.consola;
+        document.getElementById('consolas').value=data.consola;
     
     })
 

@@ -157,6 +157,8 @@ caracter         (\'({escape2} | {aceptacion2})\')
     const param= require('../Interprete/Instrucciones/parametro')
     const func= require('../Interprete/Instrucciones/funciones')
     const sreturn= require('../Interprete/Instrucciones/sent_transfer/Sent_return')
+    const simbolo = require('../Interprete/TablaSimbolos/Simbolos')
+    const continuar=require('../Interprete/Instrucciones/sent_transfer/Sentcontinue')
 
 
 %}
@@ -199,7 +201,7 @@ instruccion : declaracion                   { $$ = $1; }
             | sentreturn                    { $$ = $1; }
             | funciones                     { $$ = $1; }
             | metodos                       { $$ = $1; }
-            | llamadas                      { $$ = $1; }
+            | llamadas PYC                  { $$ = $1; }
             | startwith                     { $$ = $1; }
             | writeline                     { $$ = $1; }
             ;
@@ -276,9 +278,16 @@ caso : RCASE exp RDOSPTS  instrucciones {$$ = new casos.default($2,$4,false,(((@
 
 sentenciawhile : RWHILE PARA exp PARC  LLAVEA instrucciones LLAVEC {$$ = new sentwhile.default($3,$6,@3.first_line,@3.first_column);}
     ;
-
+//SENTENCIAS RETURN Y CONTINUE BREAK
 sentbreak: RBREAK PYC {$$ = new detener.default();}
     ;
+sentcontinue: RCONTINUE PYC { $$ = new continuar.default();}
+    ;
+
+sentreturn: RRETURN exp PYC {$$= new sreturn.default($2); }
+    | RRETURN PYC   {$$= new sreturn.default(null); }
+    ;
+
 
 writeline : WRITELINE PARA exp PARC PYC { $$ = new writeline.default($3,((@3.first_line-1)/2)+1,@3.first_column);  console.log("AAAAAAAAAAA writeline en linea: "+((@3.first_line)/2)+" y columna: "+@3.first_column);}
         ;
@@ -299,19 +308,20 @@ sentenciadowhile  : RDO LLAVEA instrucciones LLAVEC RWHILE PARA exp PARC PYC  {$
 
 //FUNCIONES METODOS Y LLAMADAS
 
-funciones : tipo ID PARA parametros PARC LLAVEA instrucciones LLAVEC {$$ = new func.default($1,$2,$4,$7,@1.first_line,@1.first_column);}
-    ;
+funciones : tipo ID PARA lista_params PARC LLAVEA instrucciones LLAVEC { $$ = new func.default(2, $1, $2,$4,false, $7,  @1.first_line, @1.last_column); }
+        | tipo ID PARA  PARC LLAVEA instrucciones LLAVEC               { $$ = new func.default(2, $1, $2,[],false, $6,  @1.first_line, @1.last_column); }
+        | RVOID ID PARA lista_params PARC LLAVEA instrucciones LLAVEC   {$$ = new func.default(3, $1, $2,$4,true, $7,  @1.first_line, @1.last_column); }
+        | RVOID ID PARA  PARC LLAVEA instrucciones LLAVEC               {$$ = new func.default(3, $1, $2,[],true, $6,  @1.first_line, @1.last_column); }
+        ;
 
-parametros  : parametros COMA tipo ID { $$= $1; $$.push(new param.default($3,$4));}
-    | tipo ID {$$= new Array(); $$.push(new param.default($1,$2)); }
-    ;
+lista_params : lista_params COMA tipo ID          { $$ = $1; $$.push(new simbolo.default(6, $3, $4, null)); }
+             | tipo ID                           { $$ = new Array(); $$.push(new simbolo.default(6, $1, $2, null)); }
+             ;
 
-metodos  : RVOID ID PARA parametros PARC LLAVEA instrucciones LLAVEC
-    ;
 
-llamadas : ID PARA lista_exp PARC PYC{ $$ = new llamads.default($1,$3,@1.first_line,@1.first_column);}
-    | ID PARA PARC PYC
-    ;
+llamadas : ID PARA lista_exp PARC {$$ = new llamads.default($1, $3,@1.first_line, @1.last_column ); }
+        | ID PARA  PARC           {$$ = new llamads.default($1, [] ,@1.first_line, @1.last_column ); }
+        ; 
 
 lista_exp: lista_exp COMA exp { $$ = $1; $$.push($3); }
     | exp { $$ = new Array(); $$.push($1); }
@@ -345,9 +355,6 @@ exp : exp MAS exp        { $$ = new aritmetica.default($1, '+',$3,((@1.first_lin
     | PARA tipo PARC    
     | ID INCRE          {$$ = new asignacion.default($1,new aritmetica.default(new identificador.default($1,((@1.first_line-1)/2)+1,@1.first_column),'+',new primitivo.default(1, 'ENTERO', @1.first_line, @1.first_column),@1.first_line,@1.first_column,false));}  //{$$ = new incre_decre.default('++',$1,@1.first_line,@1.first_column);}
     | ID DECRE          {$$ = new asignacion.default($1,new aritmetica.default(new identificador.default($1,((@1.first_line-1)/2)+1,@1.first_column),'-',new primitivo.default(1, 'ENTERO', @1.first_line, @1.first_column),@1.first_line,@1.first_column,false));}//{$$ = new incre_decre.default('--',$1,@1.first_line,@1.first_column);}
-    | ID PARA lista_exp PARC { $$ = new llamads.default($1,$3,@1.first_line,@1.first_column);}
+    | llamadas          {$$=$1;}
     ;
 
-sentreturn: RRETURN exp PYC {$$= new sreturn.default($2); }
-    | RRETURN PYC   {$$= new sreturn.default(null); }
-    ;

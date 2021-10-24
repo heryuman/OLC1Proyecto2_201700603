@@ -6,6 +6,7 @@ import { Instruccion } from "../Interfaces/Instruccion";
 import TablaSimbolos from "../TablaSimbolos/TablaSimbolos";
 import { tipo } from "../TablaSimbolos/Tipo";
 import Detener from "./SentBreak";
+import Continue from "./sent_transfer/Sentcontinue";
 
 
 export default class Sentfor implements Instruccion{
@@ -42,6 +43,7 @@ export default class Sentfor implements Instruccion{
 
        if (this.condicion.getTipo(controlador,ts_local) == tipo.BOOLEANO){
 
+        
         while(this.condicion.getValor(controlador,ts_local)){
 
             let ts_local2= new TablaSimbolos(ts_local);
@@ -50,12 +52,18 @@ export default class Sentfor implements Instruccion{
 
                 let res= inst.ejecutar(controlador,ts_local2);
 
-                if (res instanceof Detener){
+                if(res != null || res != undefined){
 
-                    controlador.sent_ciclica=temp;
-                    return res;
+                    if(res instanceof Detener){
+
+                        controlador.sent_ciclica=temp
+                        return res;
+                    }
+                    else if(res instanceof Continue){
+
+                        this.actualizacion.ejecutar(controlador,ts_local2);
+                    }
                 }
-
 
             }
            this.actualizacion.ejecutar(controlador,ts_local);

@@ -1,3 +1,4 @@
+import Errores from "../Ast/Errores";
 import Nodo from "../Ast/Nodo";
 import Controlador from "../Controlador";
 import { Expresion } from "../Interfaces/Expresion";
@@ -26,6 +27,11 @@ export default class WriteLine implements Instruccion{
 
             let valor= this.expresion.getValor(controlador,ts);
             controlador.append(valor);
+        }else{
+
+            let error = new Errores("Semantico",`la funcion no puede imprimir un valor ${tipo_valor}`,this.linea,this.columna);
+            controlador.errores.push(error);
+            controlador.append(`**Error: Samntico, la funcion no puede imprimir un valor ${tipo_valor} en la linea: ${this.linea} y columna: ${this.columna} `);
         }
     }
 

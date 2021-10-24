@@ -51,7 +51,7 @@ export default class TablaSimbolos{
         let ts : TablaSimbolos = this; 
 
         while(ts != null){
-            let existe = ts.tabla.get(id);
+            let existe = ts.tabla.get(id.toLowerCase());
 
             if(existe != null){
                 return existe;

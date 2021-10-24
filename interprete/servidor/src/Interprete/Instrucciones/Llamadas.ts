@@ -5,128 +5,166 @@ import { Expresion } from "../Interfaces/Expresion";
 import { Instruccion } from "../Interfaces/Instruccion";
 import Simbolo from "../TablaSimbolos/Simbolos";
 import TablaSimbolos from "../TablaSimbolos/TablaSimbolos";
-import parametro from "./parametro";
+import { tipo } from "../TablaSimbolos/Tipo";
+import Funciones from "./funciones";
+
 import Sent_return from "./sent_transfer/Sent_return";
 
 
 
-export default class Llamadas implements Instruccion{
+export default class Llamada implements Instruccion, Expresion{
 
+    public identificador : string;
+    public parametros : Array<Expresion>;
+    public linea : number;
+    public columna : number;
 
-    public id_llamada:string;
-    public lista_params:Array<Expresion>;
-    public linea:number;
-    public columna:number;
-
-    constructor(id_llamada:string,lparamas:Array<Expresion>, linea:number,columna:number){
-        this.id_llamada=id_llamada;
-        this.lista_params=lparamas;
-        this.linea=linea;
-        this.columna=columna;
+    constructor(identificador : string,  parametros : Array<Expresion>, linea :number, columna:number) {
+        this.identificador = identificador;
+        this.parametros = parametros;
+        this.columna = columna;
+        this.linea = linea;
     }
 
+    getTipo(controlador: Controlador, ts: TablaSimbolos): tipo {
+        let simbolo_funcion = ts.getSimbolo(this.identificador) as Funciones ;
 
-    ejecutar(controlador:Controlador,ts:TablaSimbolos){
-        var cont=0;
-        let iguales=false;
+        return simbolo_funcion.tipo.enum_tipo; 
+    }
+    getValor(controlador: Controlador, ts: TablaSimbolos) {
+        //1. Verificar si el método existe en la tabla de símbolos.
+        if(ts.existe(this.identificador)){
+            //2. Crear una nueva tabla de símbolos la cual será local.
+            let ts_local = new TablaSimbolos(ts);
+            //3. obtener el simbolo del metodo 
+            let simbolo_funcion = ts.getSimbolo(this.identificador)  as Funciones;
+
+
+            //4. verificar si los parametros estan correctos
+            if(this.validar_parametros(this.parametros, simbolo_funcion.lista_params!, controlador, ts, ts_local)){
+                let retorno = simbolo_funcion.ejecutar(controlador, ts_local);
+
+                if(retorno != null){
+                    return retorno; 
+                }
+            }
+        }else{
+            // error semantico no existe el metodo a llamar
+        }
+    }
+
+    // string s = holamundo();
+    // string holamundo(){  writeline("hola mundo"); return "holamundo "; }
+
+    ejecutar(controlador: Controlador, ts: TablaSimbolos) {
         
-        if(ts.existe(this.id_llamada)){
-            let ts_local= new TablaSimbolos(ts);
-            console.log("existe la funcion "+this.id_llamada);
-            let simbol= ts.getSimbolo(this.id_llamada);
-            if(simbol?.simbolo==2){
+        //1. Verificar si el método existe en la tabla de símbolos.
+        if(ts.existe(this.identificador)){
+            //2. Crear una nueva tabla de símbolos la cual será local.
+            let ts_local = new TablaSimbolos(ts);
+            //3. obtener el simbolo del metodo 
+            let simbolo_funcion = ts.getSimbolo(this.identificador)  as Funciones;
+            let esmetodo=simbolo_funcion.metodo;
+            let numSimbolo=simbolo_funcion.simbolo;
+            console.log("#simbolo="+numSimbolo);
 
-               // console.log("el tipo de simbolo es: "+simbol?.simbolo)
-               
+            //4. verificar si los parametros estan correctos
+            if(this.validar_parametros(this.parametros, simbolo_funcion.lista_params!, controlador, ts, ts_local)){
+                let retorno = simbolo_funcion.ejecutar(controlador, ts_local);
 
-             /*   for (let param of this.lista_params){
-
-                    if(simbol.lista_params != undefined){
-
-                        for(let paramsim of simbol.lista_params){
-
-                            //console.log("antes if el tipo param: "+param.getTipo(controlador,ts)+" el tipo paramsim: "+paramsim.tipo.enum_tipo);
-
-                            if(param.getTipo(controlador,ts)== paramsim.tipo.enum_tipo){
-
-                                console.log("el tipo param: "+param.getTipo(controlador,ts)+" el tipo paramsim: "+paramsim.tipo.enum_tipo);
-                                cont=cont+1;
-                                let valorParam= param.getValor(controlador,ts)
-                                console.log("nuevo valor:"+valorParam+" del parametro"+paramsim.identificador);
-                                paramsim.setValor(valorParam)
-
-                                
-
-                                if(cont== this.lista_params.length && cont == simbol.lista_params.length){
-                                    console.log("el num param es: "+cont);
-                                    iguales=true;
-                                }
-
-
-
-                            }
-                        }
-
+                if(retorno != null   ){
+ 
+                    if(numSimbolo == 2){
+                        
+                    console.log("entro al retorno wacho, el # simbolo: "+numSimbolo);
+                    return retorno;
 
                     }
-                }*/
+                }
 
-                for(let i=0; i<this.lista_params.length; i++){
+                if(esmetodo== false){
 
-                    if(simbol.lista_params != undefined){
-                        if(this.lista_params[i].getTipo(controlador,ts)==simbol.lista_params[i].tipo.enum_tipo){
-
-                            let valor_param= this.lista_params[i].getValor(controlador,ts);
-                            let id_param_sim= simbol.lista_params[i].identificador;
-                            simbol.lista_params[i].setValor(valor_param);
-                            let tipo_sim= simbol.lista_params[i].tipo;
-                            let valor_param_sim= simbol.lista_params[i].valor;
-
-                            console.log("el nuevo valor del simbolo: "+id_param_sim+" es: "+valor_param_sim);
-
-                            let nsimbolo= new Simbolo(1,tipo_sim,id_param_sim,valor_param);
-                            ts_local.agregar(id_param_sim,nsimbolo);
-                            cont=cont+1;
-                            if(cont== this.lista_params.length && cont == simbol.lista_params.length){
-                                console.log("el num param es: "+cont);
-                                iguales=true;
-                            }
-
-                        }
-                    }
+                    let error = new Errores("Semantico","Se necesita retornar un valor de la funcion",this.linea,this.columna);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error:Semantico en la linea ${this.linea} y columna: ${this.columna} se necista retornar un valor de la funcion`);
 
                 }
 
+                if(numSimbolo==3 && retorno instanceof Sent_return){
+                    console.log("el no del simbolo en el else: "+numSimbolo);
+                    let error = new Errores("Semantico","Se trata de devolver un valor en un metodo",this.linea,this.columna);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error:Semantico en el metodo de  la linea ${this.linea} y columna: ${this.columna} se trata de devolver un valor en un metodo`);
 
-                if(iguales== true){
-                    console.log("iguales: "+iguales)
-                    console.log("ejecuta instrucciones de la func."+this.id_llamada)
-                    simbol.valor.ts=ts_local
 
-                    for (let ins of simbol.valor.L_inst){
-
-                        ins.ejecutar(controlador,simbol.valor.ts);
                     }
-
-                 
-                }
-               /* let error= new Errores("semantico",`La funcion espera retornar un valor`,this.linea,this.columna);
-                controlador.errores.push(error);
-                controlador.append(`***ERROR: Semantico, La funcion espera retornar un valor, en la linea: ${this.linea} y columna: ${this.columna}`);
-                return null;*/
-
 
 
             }
+        }else{
+            // error semantico no existe el metodo a llamar
 
-
-            
+            let error = new Errores("Semantico","el metodo que se invoca no existe en el entorno actual",this.linea,this.columna);
+            controlador.errores.push(error);
+            controlador.append(`**Error:Semantico, el metodo que se invoca no existe en el entorno actual, en la lina ${this.linea} y columna: ${this.columna}`);
 
         }
-
+        
     }
 
-    recorrer():Nodo{
-        throw new Error("Metodo no implementado");
+    validar_parametros(parametros_llamada : Array<Expresion>, parametros_funcion: Array<Simbolo>, controlador : Controlador, ts: TablaSimbolos, ts_local: TablaSimbolos){
+        /* 4. Verificar si la cantidad de parámetros en la llamada 
+            es igual a la cantidad de parámetros que posee el método. */
+        if(parametros_llamada.length == parametros_funcion.length){
+            //--> parametros desde funcion/metodo
+            let aux : Simbolo; // -> parametro
+            let aux_id : string; // -> id parametro 
+            let aux_tipo; //-> tipo parametro 
+
+            //--> valores de la llamada
+            let aux_exp : Expresion; //-> expresion que se le va a asignar al parametro 
+            let aux_exp_tipo; //-> tipo de la expresio 
+            let aux_exp_valor;  //-> valor de la expresion 
+
+            // 5. Verificar que cada valor a asignar sea del mismo tipo de los parametros del metodo.
+            for(let i = 0; i < parametros_llamada.length ; i++){
+                // void suma( int n1 , int n2){... }
+                // suma(3,4); 
+                // int n1 = 3; int n2 = 4; 
+                //--> vamos a guardar la informacion del parametro de la funcion
+                aux = parametros_funcion[i] as Simbolo;
+                aux_id = aux.identificador;
+                aux_tipo = aux.tipo.enum_tipo; // ENTERO, DOBLE 
+
+                //--> Vamos a guardar la informacion del parametro de la llamada
+                aux_exp = parametros_llamada[i] as Expresion;
+                aux_exp_tipo = aux_exp.getTipo(controlador, ts);
+                aux_exp_valor = aux_exp.getValor(controlador,ts);
+
+                // validar si el valor del parametro de llamada es igual al valor del parametro de la funcion
+                if(aux_tipo == aux_exp_tipo){
+                      // 5. a) Si son del mismo tipo se debe de guardar cada parámetro con su valor en la tabla de símbolos local. 
+                      
+                      let simbolo = new Simbolo(aux.simbolo, aux.tipo, aux_id, aux_exp_valor);
+                      ts_local.agregar(aux_id, simbolo);
+                }
+            }
+            return true;
+        }else {
+            //reportamos error semantico
+
+            let error = new Errores("Semantico","La cantidad de parmetros de la llamada es incorrecta",this.linea,this.columna);
+            controlador.errores.push(error);
+            controlador.append(`**Error:Semantico, en la linea: ${this.linea} y columna: ${this.columna}- la cantidad de parametros de la llamada es incorrecta`);
+
+        }
+        return false;
+         
     }
+
+
+    recorrer(): Nodo {
+        throw new Error("Method not implemented.");
+    } 
+
 }

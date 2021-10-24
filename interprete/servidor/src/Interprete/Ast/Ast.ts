@@ -1,5 +1,6 @@
 import Controlador from "../Controlador";
 import Declaracion from "../Instrucciones/Declaracion";
+import Funciones from "../Instrucciones/funciones";
 import { Instruccion } from "../Interfaces/Instruccion";
 import TablaSimbolos from "../TablaSimbolos/TablaSimbolos";
 import Nodo from "./Nodo";
@@ -19,14 +20,30 @@ export default class Ast implements Instruccion{
         // int x = 9;
         //1 era pasada. ejecutar las declaraciones de variables
         for(let instruccion of this.lista_instrucciones){
-            if(instruccion instanceof Declaracion){
-                instruccion.ejecutar(controlador,ts);
+           
+            if(instruccion instanceof Funciones){
+
+                let funcion= instruccion as Funciones;
+                funcion.agregarFuncionTS(ts);
+
             }
         }
 
         //2da pada. ejecutamos todas las demas instrucciones
         for(let instruccion of this.lista_instrucciones){
-            if(!(instruccion instanceof Declaracion)){
+            if(instruccion instanceof Declaracion){
+                instruccion.ejecutar(controlador,ts);
+            }
+
+           
+        }
+
+        //3ra. pasada ejecutamos todas las demas instruccs
+
+        for (let instruccion of this.lista_instrucciones){
+
+            if(!(instruccion instanceof Declaracion) && !(instruccion instanceof Funciones)){
+
                 instruccion.ejecutar(controlador,ts);
             }
         }
