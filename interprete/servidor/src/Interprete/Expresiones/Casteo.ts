@@ -41,6 +41,10 @@ export default class Casteo implements Expresion {
                 else if(this.type.enum_tipo == tipo.CARACTER){
 
                     return tipo.CARACTER;
+                }else{
+                    let error = new Errores("Semantico",`el tipo: ${this.type.nombre_tipo} de dato no es admitido en el casteo`,this.linea,this.columna);
+                    contorlador.errores.push(error);
+                    contorlador.append(`**Error:Semantico, el tipo ${this.type.nombre_tipo} de dato no es adminitodo en el casteo, en la linea ${this.linea} y columna: ${this.columna}`);
                 }
 
             }
@@ -52,9 +56,15 @@ export default class Casteo implements Expresion {
                     return tipo.ENTERO;
                 }
 
-                if(this.type.enum_tipo== tipo.CADENA){
+                else if(this.type.enum_tipo== tipo.CADENA){
 
                     return tipo.CADENA;
+                }
+
+                else{
+                    let error = new Errores("Semantico",`el tipo: ${this.type.nombre_tipo} de dato no es admitido en el casteo`,this.linea,this.columna);
+                    contorlador.errores.push(error);
+                    contorlador.append(`**Error:Semantico, el tipo ${this.type.nombre_tipo} de dato no es adminitodo en el casteo, en la linea ${this.linea} y columna: ${this.columna}`);
                 }
             }
 
@@ -69,6 +79,17 @@ export default class Casteo implements Expresion {
 
                     return tipo.DOBLE;
                 }
+
+                else{
+                    let error = new Errores("Semantico",`el tipo: ${this.type.nombre_tipo} de dato no es admitido en el casteo`,this.linea,this.columna);
+                    contorlador.errores.push(error);
+                    contorlador.append(`**Error:Semantico, el tipo ${this.type.nombre_tipo} de dato no es adminitodo en el casteo, en la linea ${this.linea} y columna: ${this.columna}`);
+                }
+            }else{
+
+                let error = new Errores("Semantico",`el tipo: ${tipo_exp} de dato no es admitido en el casteo`,this.linea,this.columna);
+                contorlador.errores.push(error);
+                contorlador.append(`**Error:Semantico, el tipo ${tipo_exp} de dato no es adminitodo en el casteo, en la linea ${this.linea} y columna: ${this.columna}`);
             }
           
         }else{

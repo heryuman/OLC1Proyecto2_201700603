@@ -159,6 +159,7 @@ caracter         (\'({escape2} | {aceptacion2})\')
     const sreturn= require('../Interprete/Instrucciones/sent_transfer/Sent_return')
     const simbolo = require('../Interprete/TablaSimbolos/Simbolos')
     const continuar=require('../Interprete/Instrucciones/sent_transfer/Sentcontinue')
+    const casteo=require('../Interprete/Expresiones/Casteo')
 
 
 %}
@@ -173,6 +174,7 @@ caracter         (\'({escape2} | {aceptacion2})\')
 %left 'POT' 
 %right 'MOD'
 %right UMINUS
+%right CAST
 
 %start inicio
 
@@ -352,7 +354,7 @@ exp : exp MAS exp        { $$ = new aritmetica.default($1, '+',$3,((@1.first_lin
     | TRUE              { $$ = new primitivo.default(true, 'BOOLEANO', ((@1.first_line-1)/2)+1, @1.first_column); }
     | FALSE             { $$ = new primitivo.default(false, 'BOOLEANO', ((@1.first_line-1)/2)+1, @1.first_column); }
     | DOBLECOMILLAS     { $1 = ""; $$ = new primitivo.default($1, 'CADENA', ((@1.first_line-1)/2)+1, @1.first_column); }
-    | PARA tipo PARC    
+    | PARA tipo PARC exp %prec CAST {$$ = new casteo.default($2,$4,@4.first_line,@4.first_column);}   
     | ID INCRE          {$$ = new asignacion.default($1,new aritmetica.default(new identificador.default($1,((@1.first_line-1)/2)+1,@1.first_column),'+',new primitivo.default(1, 'ENTERO', @1.first_line, @1.first_column),@1.first_line,@1.first_column,false));}  //{$$ = new incre_decre.default('++',$1,@1.first_line,@1.first_column);}
     | ID DECRE          {$$ = new asignacion.default($1,new aritmetica.default(new identificador.default($1,((@1.first_line-1)/2)+1,@1.first_column),'-',new primitivo.default(1, 'ENTERO', @1.first_line, @1.first_column),@1.first_line,@1.first_column,false));}//{$$ = new incre_decre.default('--',$1,@1.first_line,@1.first_column);}
     | llamadas          {$$=$1;}
