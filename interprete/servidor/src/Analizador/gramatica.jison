@@ -160,7 +160,14 @@ caracter         (\'({escape2} | {aceptacion2})\')
     const simbolo = require('../Interprete/TablaSimbolos/Simbolos')
     const continuar=require('../Interprete/Instrucciones/sent_transfer/Sentcontinue')
     const casteo=require('../Interprete/Expresiones/Casteo')
-
+    const nativas=require('../Interprete/Expresiones/Nativas/Nativas')
+    const vector= require('../Interprete/Instrucciones/Decla_Vector')
+    const access_vector=require('../Interprete/Expresiones/Accesovector')
+    const get_lista= require('../Interprete/Expresiones/Get_lis')
+    const set_vector = require('../Interprete/Instrucciones/Set_vector')
+    const declalista = require('../Interprete/Instrucciones/Decla_lista')
+    const apendlist =  require('../Interprete/Instrucciones/Append_list')
+    const set_lista = require('../Interprete/Instrucciones/Set_list')
 
 %}
 
@@ -206,8 +213,16 @@ instruccion : declaracion                   { $$ = $1; }
             | llamadas PYC                  { $$ = $1; }
             | startwith                     { $$ = $1; }
             | writeline                     { $$ = $1; }
+            | declalista                    { $$ = $1; }
+            | lista_append                  { $$ = $1; }
+            | set_lista                     { $$ = $1; }
+            | decla_vector                  { $$ = $1; }
+            | set_vector                    { $$ = $1; }
             ;
 
+
+//INICIAN LAS INSTRUCCIONES
+/* DECLARACIONES Y ASIGNACIONES*/
 declaracion : tipo lista_ids IGUAL exp PYC  { $$ = new declaracion.default($1, $2, $4,(((@2.first_line)-1)/2)+1,@2.first_column); console.log("se leyo en la linea"); console.log((((@2.first_line)-1)/2)+1);}  
             | tipo lista_ids PYC         { $$ = new declaracion.default($1, $2, null,(((@2.first_line)-1)/2)+1,@2.first_column);}
             ;
@@ -227,46 +242,36 @@ lista_ids : lista_ids COMA ID   { $$ = $1; $$.push($3); }
 asignaciones : ID IGUAL exp  { $$ = new asignacion.default($1,$3,((@1.first_line-1)/2)+1,@1.first_column);}
     ;
 
-
-vectores : declavector
-    | accesvector
-    | modvector
-    ;
-    
-declavector :tipo ID CORCHA CORCHC IGUAL RNEW tipo CORCHA exp CORCHC PYC
-    |tipo ID CORCHA CORCHC IGUAL LLAVEA lista_valores LLAVEC PYC
+// INSTRUCIONES DE LISTAS
+declalista : RDYNAMICLIST MENORQUE tipo MAYORQUE ID IGUAL RNEW RDYNAMICLIST MENORQUE tipo MAYORQUE PYC { $$= new declalista.default($3,$5,@1.first_line,@1.first_column);}
+        | RDYNAMICLIST MENORQUE tipo MAYORQUE ID IGUAL RTOCHARARRAY PARA exp PARC PYC {$$= new vector.default(3,$3,$5,$9,@1.first_line,@1.first_column);}
     ;
 
-accesvector : ID CORCHA exp CORCHC
+lista_append: RAPPEND PARA ID COMA exp PARC PYC {$$ = new  apendlist.default($3,$5,@1.first_line,@1.first_column);}
     ;
 
-modvector : ID CORCHA exp CORCHC IGUAL exp PYC
+get_lista : RGETVALUE PARA ID COMA exp PARC  {$$= new  get_lista.default($3,$5,@1.first_line,@1.first_column);}
     ;
 
-listas  : declalista
-    | insertar_lista
-    | obtener_lista
-    | modlista
+set_lista : RSETVALUE PARA ID COMA exp COMA exp PARC PYC {$$ = new set_lista.default($3,$5,$7,@1.first_line,@1.first_column)}
     ;
 
-declalista : RDYNAMICLIST MENQUE tipo MAYQUE ID IGUAL RNEW RDYNAMICLIST MENQUE tipo MAYQUE PYC
-        | RDYNAMICLIST MENQUE tipo MAYQUE ID IGUAL tochararray
-    ;
+// INSTRUCCIONES DE VECTORES
+decla_vector: tipo ID CORA CORC IGUAL RNEW tipo CORA exp CORC PYC  {$$= new vector.default(1,$1,$2,$9,@1.first_line,@1.first_column);}
+            | tipo ID CORA CORC IGUAL LLAVEA lista_exp LLAVEC PYC   {$$= new vector.default(2,$1,$2,$7,@1.first_line,@1.first_column);}
+            ;
+get_vector: ID CORA exp CORC {$$ = new access_vector.default($1,$3,@1.first_line,@1.first_column);}  // este va a exp
+         ;
 
-insertar_lista : RAPPEND PARA ID COMA exp PARC PYC
-    ;
+set_vector: ID CORA exp CORC IGUAL exp PYC {$$ = new set_vector.default($1,$3,$6,@1.first_line,@1.first_column);}
+         ;
 
-obtener_lista : RGETVALUE PARA ID COMA exp PARC // posiblemente se agrega a las expresiones 
-    ;
-
-modlista : RSETVALUE PARA ID COMA exp COMA exp PARC PYC
-    ;
-
+//INSTRUCCIONES SENTENCIA IF
 sentenciaif : RIF PARA exp  PARC LLAVEA instrucciones LLAVEC  { $$ = new sentenciaIf.default($3, $6, [], @3.first_line, @3.last_column); } 
     | RIF PARA exp  PARC LLAVEA instrucciones LLAVEC RELSE LLAVEA instrucciones LLAVEC { $$ = new sentenciaIf.default($3, $6, $10, @3.first_line, @3.last_column); }
     | RIF PARA exp  PARC LLAVEA instrucciones LLAVEC RELSE sentenciaif { $$ = new sentenciaIf.default($3, $6, [$9], @3.first_line, @3.last_column); }
     ;
-
+// SENTENCIA SWITCH-CASE
 sentenciaswitch : RSWITCH PARA exp PARC LLAVEA casos LLAVEC { $$ = new sentswitch.default($3,$6,@3.first_line,@3.first_column); }
     ;
 
@@ -277,6 +282,8 @@ casos : casos  caso { $$ = $1; $$.push($2); }
 caso : RCASE exp RDOSPTS  instrucciones {$$ = new casos.default($2,$4,false,(((@2.first_line)-1)/2)+1,@2.first_column);}
     | RDEFAULT RDOSPTS  instrucciones   {$$ = new casos.default($1,$3,true,(((@2.first_line)-1)/2)+1,@2.first_column);}
     ;
+
+//SENTENCIA WHILE 
 
 sentenciawhile : RWHILE PARA exp PARC  LLAVEA instrucciones LLAVEC {$$ = new sentwhile.default($3,$6,@3.first_line,@3.first_column);}
     ;
@@ -289,11 +296,11 @@ sentcontinue: RCONTINUE PYC { $$ = new continuar.default();}
 sentreturn: RRETURN exp PYC {$$= new sreturn.default($2); }
     | RRETURN PYC   {$$= new sreturn.default(null); }
     ;
-
+// INSTRUCCION WRITELINE
 
 writeline : WRITELINE PARA exp PARC PYC { $$ = new writeline.default($3,((@3.first_line-1)/2)+1,@3.first_column);  console.log("AAAAAAAAAAA writeline en linea: "+((@3.first_line)/2)+" y columna: "+@3.first_column);}
         ;
-
+//SENTENCIA FOR
 sentenciafor : RFOR PARA declaracion_for PYC exp PYC contador_for PARC LLAVEA instrucciones LLAVEC { $$ = new sentfor.default($3, $5, $7, $10, @1.first_line, @1.last_column); }
         ;
 
@@ -305,6 +312,8 @@ contador_for: ID INCRE          {$$ = new asignacion.default($1,new aritmetica.d
         | ID DECRE              {$$ = new asignacion.default($1,new aritmetica.default(new identificador.default($1,((@1.first_line-1)/2)+1,@1.first_column),'-',new primitivo.default(1, 'ENTERO', @1.first_line, @1.first_column),@1.first_line,@1.first_column,false));}
         | ID IGUAL exp          {$$ = new asignacion.default($1,$3,((@1.first_line-1)/2)+1,@1.first_column);}
         ;
+
+        //SENTENCIA DO WHILE
 sentenciadowhile  : RDO LLAVEA instrucciones LLAVEC RWHILE PARA exp PARC PYC  {$$ = new sentwhile.default($7,$3,@3.first_line,@3.first_column);}
     ;
 
@@ -329,6 +338,7 @@ lista_exp: lista_exp COMA exp { $$ = $1; $$.push($3); }
     | exp { $$ = new Array(); $$.push($1); }
     ;
 
+// EXPRESIONES 
 exp : exp MAS exp        { $$ = new aritmetica.default($1, '+',$3,((@1.first_line-1)/2)+1,@1.first_column,false); console.log("expresion E+E en la linea: "+ @1.first_line+" y lascolumn: "+@1.last_column);}
     | exp MENOS exp      { $$ = new aritmetica.default($1, '-',$3,((@1.first_line-1)/2)+1, @1.first_column,false); }
     | exp MULTI exp      { $$ = new aritmetica.default($1, '*', $3,((@1.first_line-1)/2)+1, @1.first_column,false); }
@@ -358,5 +368,15 @@ exp : exp MAS exp        { $$ = new aritmetica.default($1, '+',$3,((@1.first_lin
     | ID INCRE          {$$ = new asignacion.default($1,new aritmetica.default(new identificador.default($1,((@1.first_line-1)/2)+1,@1.first_column),'+',new primitivo.default(1, 'ENTERO', @1.first_line, @1.first_column),@1.first_line,@1.first_column,false));}  //{$$ = new incre_decre.default('++',$1,@1.first_line,@1.first_column);}
     | ID DECRE          {$$ = new asignacion.default($1,new aritmetica.default(new identificador.default($1,((@1.first_line-1)/2)+1,@1.first_column),'-',new primitivo.default(1, 'ENTERO', @1.first_line, @1.first_column),@1.first_line,@1.first_column,false));}//{$$ = new incre_decre.default('--',$1,@1.first_line,@1.first_column);}
     | llamadas          {$$=$1;}
+    | RTOLOWER PARA exp PARC {$$ = new nativas.default("tolower",$3,@3.first_line,@3.first_column);}
+    | RTOUPPER PARA exp PARC {$$ = new nativas.default("toupper",$3,@3.first_line,@3.first_column);}
+    | RLENGTH PARA exp PARC  {$$ = new nativas.default("length",$3,@3.first_line,@3.first_column);}
+    | RTRUNCATE PARA exp PARC{$$ = new nativas.default("truncate",$3,@3.first_line,@3.first_column);}
+    | RROUND PARA exp PARC   {$$ = new nativas.default("round",$3,@3.first_line,@3.first_column);}
+    | RTYPEOF PARA exp PARC  {$$ = new nativas.default("typeof",$3,@3.first_line,@3.first_column);}
+    | RTOSTRING PARA exp PARC{$$ = new nativas.default("tostring",$3,@3.first_line,@3.first_column);}
+    | RTOCHARARRAY PARA exp PARC{$$ = new nativas.default("tochararray",$3,@3.first_line,@3.first_column);}
+    | get_lista              { $$= $1; }
+    | get_vector             { $$=$1;   }
     ;
 

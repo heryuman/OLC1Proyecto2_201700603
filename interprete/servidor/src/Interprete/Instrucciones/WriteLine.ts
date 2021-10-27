@@ -1,3 +1,4 @@
+import { write } from "fs";
 import Errores from "../Ast/Errores";
 import Nodo from "../Ast/Nodo";
 import Controlador from "../Controlador";
@@ -23,8 +24,9 @@ export default class WriteLine implements Instruccion{
     ejecutar(controlador:Controlador,ts:TablaSimbolos){
 
         let tipo_valor= this.expresion.getTipo(controlador,ts);
-        if(tipo_valor==tipo.ENTERO || tipo_valor==tipo.DOBLE || tipo_valor== tipo.CARACTER ||tipo_valor== tipo.CADENA || tipo_valor == tipo.BOOLEANO){
+        if(tipo_valor==tipo.ENTERO || tipo_valor==tipo.DOBLE || tipo_valor== tipo.CARACTER ||tipo_valor== tipo.CADENA || tipo_valor == tipo.BOOLEANO || tipo_valor == tipo.VECTOR){
 
+            console.log("en wl tipo de exp= "+tipo_valor)
             let valor= this.expresion.getValor(controlador,ts);
             controlador.append(valor);
         }else{

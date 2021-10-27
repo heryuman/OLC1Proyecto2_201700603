@@ -9,7 +9,8 @@
     CARACTER, 
     CADENA, 
     ERROR,
-    VOID
+    VECTOR,
+    LISTA
 }
 
 /** 
@@ -38,9 +39,13 @@ export default class Tipo{
             return tipo.CARACTER;
         }else if(this.nombre_tipo == 'BOOLEANO'){
             return tipo.BOOLEANO;
-        }else if(this.nombre_tipo == 'VOID'){
-            return tipo.BOOLEANO;
-        }else{
+        }else if(this.nombre_tipo == 'VECTOR'){
+            return tipo.VECTOR;
+        }else if(this.nombre_tipo == 'LISTA'){
+            return tipo.LISTA;
+        }
+        
+        else{
             return tipo.ERROR;
         }
     }

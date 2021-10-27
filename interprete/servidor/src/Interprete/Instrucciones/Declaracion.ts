@@ -45,7 +45,7 @@ export default class Declaracion implements Instruccion{
             if (this.expresion != null){
 
                 let tipo_valor= this.expresion.getTipo(controlador,ts);//indica si es entero, bool, doble,etc
-                console.log("el tipo de la expresion de la declaracion"+tipo_valor);
+//console.log("el tipo de la expresion de la declaracion"+tipo_valor);
                 let valor= this.expresion.getValor(controlador,ts);//0 o true, 1.4
                 
                 if(tipo_valor==this.type.enum_tipo){

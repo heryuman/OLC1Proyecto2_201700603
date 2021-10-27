@@ -147,6 +147,9 @@ export default class Operacion implements Expresion {
 
 
 
+    getSize(controlador:Controlador,ts:TablaSimbolos):number{
 
+        return 0;
+    }
 
 }

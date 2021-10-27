@@ -630,4 +630,9 @@ export default class Aritmetica extends Operacion implements Expresion{
         throw new Error("Method not implemented.");
     }
 
+    getSize(controlador:Controlador,ts:TablaSimbolos):number{
+
+        return 1;
+    }
+
 }

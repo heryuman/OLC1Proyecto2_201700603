@@ -19,7 +19,7 @@ export default class Simbolo{
      * @param identificador nombre identificador de la variable
      * @param valor valor de la variable
      * @param lista_params lista de simbolos de tipo parametro (para funciones o metodos)
-     * @param metodo booleano que indica si es metodo (true) o funcion (false) 
+     * @param metodo booleano que indica si es metodo/lista (true) o funcion/vector (false) 
      */
     constructor(simbolo: number, tipo: Tipo, identificador: string, valor: any, lista_params?:Array<Simbolo>, metodo?:boolean) {
         this.simbolo = simbolo;

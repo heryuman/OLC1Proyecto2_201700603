@@ -4,6 +4,9 @@ import Funciones from "../Instrucciones/funciones";
 import { Instruccion } from "../Interfaces/Instruccion";
 import TablaSimbolos from "../TablaSimbolos/TablaSimbolos";
 import Nodo from "./Nodo";
+import Decla_vector from "../Instrucciones/Decla_Vector";
+import Decla_lista from "../Instrucciones/Decla_lista";
+import Append_list from "../Instrucciones/Append_list";
 
 export default class Ast implements Instruccion{
 
@@ -27,6 +30,15 @@ export default class Ast implements Instruccion{
                 funcion.agregarFuncionTS(ts);
 
             }
+
+            else if(instruccion instanceof Decla_vector){
+
+                instruccion.ejecutar(controlador,ts);
+
+            }else if ( instruccion instanceof Decla_lista || instruccion instanceof Append_list){
+
+                instruccion.ejecutar(controlador,ts);
+            }
         }
 
         //2da pada. ejecutamos todas las demas instrucciones
@@ -42,7 +54,7 @@ export default class Ast implements Instruccion{
 
         for (let instruccion of this.lista_instrucciones){
 
-            if(!(instruccion instanceof Declaracion) && !(instruccion instanceof Funciones)){
+            if(!(instruccion instanceof Declaracion) && !(instruccion instanceof Funciones) && !(instruccion instanceof Decla_vector)&& !(instruccion instanceof Decla_lista)){
 
                 instruccion.ejecutar(controlador,ts);
             }

@@ -137,5 +137,10 @@ export default class Logica extends Operacion implements Expresion{
 
     }
 
+    getSize(controlador:Controlador,ts:TablaSimbolos):number{
+
+        return 0;
+    }
+
 
 }

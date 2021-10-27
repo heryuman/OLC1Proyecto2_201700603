@@ -39,6 +39,11 @@ export default class Primitivo implements Expresion{
         throw new Error("Metodo no implementado");
     }
 
+    getSize(controlador:Controlador,ts:TablaSimbolos):number{
+
+        return 0;
+    }
+
 
 
 

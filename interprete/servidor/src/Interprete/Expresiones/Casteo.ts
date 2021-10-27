@@ -163,4 +163,9 @@ export default class Casteo implements Expresion {
          throw new Error("un error en casteo");
     }
 
+    getSize(controlador:Controlador,ts:TablaSimbolos):number{
+
+        return 0;
+    }
+
 }

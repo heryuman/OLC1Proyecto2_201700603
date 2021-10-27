@@ -10,6 +10,8 @@ export interface Expresion{
 
     getValor(controlador: Controlador,ts: TablaSimbolos):any;
 
+    getSize(controlador:Controlador,ts:TablaSimbolos):number;
+
     recorrer():Nodo;
 
 }

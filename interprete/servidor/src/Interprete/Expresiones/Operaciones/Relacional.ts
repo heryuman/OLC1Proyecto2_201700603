@@ -535,5 +535,9 @@ export default class Relacionales extends Operacion implements Expresion{
         throw new Error("Method not implemented.");
     }
 
+    getSize(controlador:Controlador,ts:TablaSimbolos):number{
+
+        return 0;
+    }
 
 }
