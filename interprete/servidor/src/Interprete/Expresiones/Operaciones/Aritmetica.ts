@@ -70,12 +70,28 @@ export default class Aritmetica extends Operacion implements Expresion{
                     }else if(tipo_exp2 == tipo.CADENA){
                         return tipo.CADENA;
                     }
+                    else{
+
+                        let error= new Errores("Semantico",`La Suma no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Suma no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
+                        return tipo.ERROR;
+                    }
                 }else if(tipo_exp1 == tipo.DOBLE){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE|| tipo_exp2 == tipo.BOOLEANO || tipo_exp2 == tipo.CARACTER){
                         return tipo.DOBLE;
                     }else if(tipo_exp2 == tipo.CADENA){
                         return tipo.CADENA; // 1.2 + "hola" -> "1.2hola"
                     }
+                    else{
+
+                        let error= new Errores("Semantico",`La Suma no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Suma no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
+                        return tipo.ERROR;
+                    }
+
+                    
                 }else if(tipo_exp1 == tipo.BOOLEANO){
                     if(tipo_exp2 == tipo.ENTERO){
                         return tipo.ENTERO;
@@ -83,7 +99,11 @@ export default class Aritmetica extends Operacion implements Expresion{
                         return tipo.DOBLE; 
                     }else if(tipo_exp2 == tipo.CADENA){
                         return tipo.CADENA; // true + "hola" -> "truehola"
-                    }else{
+                    }  else{
+
+                        let error= new Errores("Semantico",`La Suma no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Suma no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
                 }else if(tipo_exp1 == tipo.CARACTER){
@@ -93,15 +113,35 @@ export default class Aritmetica extends Operacion implements Expresion{
                         return tipo.DOBLE; 
                     }else if(tipo_exp2 == tipo.CADENA || tipo_exp2 == tipo.CARACTER){
                         return tipo.CADENA; 
-                    }else{
+                    } 
+                    
+                    else{
+
+                        let error= new Errores("Semantico",`La Suma no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Suma no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
                 }else if(tipo_exp1 == tipo.CADENA){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE || tipo_exp2 == tipo.BOOLEANO || tipo_exp2 == tipo.CARACTER || tipo_exp2 == tipo.CADENA){
                         return tipo.CADENA;
-                    }else{
+                    }
+
+                    else{
+
+                        let error= new Errores("Semantico",`La Suma no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Suma no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
+                }
+
+                else{
+
+                    let error= new Errores("Semantico","La suma no se efectuó, El tipo de la expresion de la izquiera no concuerda con los tipos admitidos del lenguajes",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La suma no se efectuó, el tipo de la expresion Izquierda no pertenece a los tipos admitidos`);
+                    return tipo.ERROR;
                 }
                 break;
             case Operador.RESTA:
@@ -110,7 +150,11 @@ export default class Aritmetica extends Operacion implements Expresion{
                         return tipo.ENTERO;
                     }else if(tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
-                    }else if (tipo_exp2 == tipo.CADENA){
+                    }  else{
+
+                        let error= new Errores("Semantico",`La Resta no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Resta no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
                 }else if(tipo_exp1 == tipo.DOBLE){
@@ -118,6 +162,10 @@ export default class Aritmetica extends Operacion implements Expresion{
                         return tipo.DOBLE;
                     }
                     else{
+
+                        let error= new Errores("Semantico",`La Resta no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Resta no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
                 }else if (tipo_exp1==tipo.BOOLEANO){
@@ -125,7 +173,12 @@ export default class Aritmetica extends Operacion implements Expresion{
                         return tipo.ENTERO;
                     }else if(tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
-                    }else{
+                    }
+                    else{
+
+                        let error= new Errores("Semantico",`La Resta no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Resta no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
                 }else if(tipo_exp1 == tipo.CARACTER){
@@ -134,10 +187,21 @@ export default class Aritmetica extends Operacion implements Expresion{
                     }else if(tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
                     }else{
+
+                        let error= new Errores("Semantico",`La Resta no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Resta no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
                 }else{
-                    return tipo.ERROR; //esto ya es para cadenas
+                    
+
+                        let error= new Errores("Semantico","La Resta no se efectuó, El tipo de la expresion de la izquiera no concuerda con los tipos admitidos del lenguajes",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La resta no se efectuó, el tipo de la expresion Izquierda no pertenece a los tipos admitidos`);
+                        return tipo.ERROR;
+                    
+                    
                 }
                 break;
             case Operador.MULTI:
@@ -146,51 +210,89 @@ export default class Aritmetica extends Operacion implements Expresion{
                         return tipo.ENTERO;
                     }else if(tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
-                    }else{
+                    }
+                    else{
+
+                        let error= new Errores("Semantico",`La Multiplicacion no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Multiplicaicon no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
                 }else if(tipo_exp1 == tipo.DOBLE){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE || tipo_exp2==tipo.CARACTER){
                         return tipo.DOBLE;
-                    }else{
+                    }
+                    
+                    else{
+
+                        let error= new Errores("Semantico",`La Multiplicacion no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Multiplicaicon no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
-                }else if(tipo_exp1 == tipo.BOOLEANO){
-                    return tipo.ERROR;
-                }else if(tipo_exp1 == tipo.CARACTER){
+                }
+                else if(tipo_exp1 == tipo.CARACTER){
                     if(tipo_exp2 == tipo.ENTERO){
                         return tipo.ENTERO;
                     }else if(tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
-                    }else{
+                    }
+                    else{
+
+                        let error= new Errores("Semantico",`La Multiplicacion no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Multiplicaicon no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
-                }else if(tipo_exp1 == tipo.CADENA){
-                    return tipo.ERROR
+                }
+                else{
+
+                    let error= new Errores("Semantico","La Multiplicacion no se efectuó, El tipo de la expresion de la izquiera no concuerda con los tipos admitidos del lenguajes",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Multiplicacion no se efectuó, el tipo de la expresion Izquierda no pertenece a los tipos admitidos`);
+                    return tipo.ERROR;
                 }
                 break;
             case Operador.DIV:
                 if(tipo_exp1 == tipo.ENTERO){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE || tipo_exp2 == tipo.CARACTER){
                         return tipo.DOBLE;
-                    }else{
+                    }
+                    
+                    else{
+
+                        let error= new Errores("Semantico",`La Division no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Division no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
                 }else if(tipo_exp1 == tipo.DOBLE){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE || tipo_exp2 == tipo.CARACTER){
                         return tipo.DOBLE;
-                    }else{
+                    } else{
+
+                        let error= new Errores("Semantico",`La Division no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Division no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
-                }else if(tipo_exp1 == tipo.BOOLEANO){
-                    return tipo.ERROR;
-                }else if(tipo_exp1 == tipo.CARACTER){
+                }
+                else if(tipo_exp1 == tipo.CARACTER){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
-                    }else{
+                    }
+                    else{
+
+                        let error= new Errores("Semantico",`La Division no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Division no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
-                }else if(tipo_exp1 == tipo.CADENA){
+                }else{
+
+                    let error= new Errores("Semantico","La Division no se efectuó, El tipo de la expresion de la izquiera no concuerda con los tipos admitidos del lenguajes",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Duivision no se efectuó, el tipo de la expresion Izquierda no pertenece a los tipos admitidos`);
                     return tipo.ERROR;
                 }
                 break;
@@ -198,10 +300,18 @@ export default class Aritmetica extends Operacion implements Expresion{
                 if(tipo_exp1 == tipo.ENTERO || tipo_exp1 == tipo.DOBLE){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
-                    }else{
+                    } else{
+
+                        let error= new Errores("Semantico",`El Modulo no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, El Modulo no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
                 }else{
+
+                    let error= new Errores("Semantico","El Modulo no se efectuó, El tipo de la expresion de la izquiera no concuerda con los tipos admitidos del lenguajes",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, El modulo no se efectuó, el tipo de la expresion Izquierda no pertenece a los tipos admitidos`);
                     return tipo.ERROR;
                 }
                 break;
@@ -211,16 +321,30 @@ export default class Aritmetica extends Operacion implements Expresion{
                         return tipo.ENTERO;
                     }else if(tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
-                    }else{
+                    }
+                    else{
+
+                        let error= new Errores("Semantico",`La Potencia no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Potencia no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
+
                 }else if(tipo_exp1 == tipo.DOBLE){
                     if (tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE){
                         return tipo.DOBLE;
-                    }else {
+                    }else{
+
+                        let error= new Errores("Semantico",`La Potencia no se efectuó, El tipo de la expresion de la derecha no concuerda con los tipos admitidos del lenguajes`,this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Potencia no se efectuó, el tipo de la expresion derecha no pertenece a los tipos admitidos`);
                         return tipo.ERROR;
                     }
                 }else{
+
+                    let error= new Errores("Semantico","La Potencia no se efectuó, El tipo de la expresion de la izquiera no concuerda con los tipos admitidos del lenguajes",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La Potencia no se efectuó, el tipo de la expresion Izquierda no pertenece a los tipos admitidos`);
                     return tipo.ERROR;
                 }
                 break;
@@ -230,6 +354,10 @@ export default class Aritmetica extends Operacion implements Expresion{
                 }else if(tipo_exp1 == tipo.DOBLE){
                     return tipo.DOBLE;
                 }else{
+
+                    let error= new Errores("Semantico","La operacion unaria no se efectuó, El tipo de la expresion  no concuerda con los tipos admitidos del lenguajes",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error:Semantico, en la linea ${this.linea} y columan ${this.col}, La operacion unaria  no se efectuó, el tipo de la expresion no pertenece a los tipos admitidos`);
                     return tipo.ERROR;
                 }
                 break;

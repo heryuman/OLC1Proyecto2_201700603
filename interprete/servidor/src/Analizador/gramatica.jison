@@ -4,7 +4,7 @@
 /* Definicion lexica */
 %lex
 %options case-insensitive 
-
+%option yylineno
 //Expresiones regulares
 num [0-9]+
 id      [a-zñA-ZÑ][a-zñA-ZÑ0-9_]*
@@ -128,7 +128,11 @@ caracter         (\'({escape2} | {aceptacion2})\')
 
 
 <<EOF>>               return 'EOF'
-.                     return 'ERROR'
+.                    {  console.log("Error Lexico: "+yytext +" linea: "+yylineno +" Columna: "+(yylloc.last_column));
+                        new errores.default('Lexico','El Caracter'+yytext+' no forma parte del lenguaje',yylineno,yylloc.last_column);
+
+
+                        }
 
 /lex
 
@@ -161,6 +165,7 @@ caracter         (\'({escape2} | {aceptacion2})\')
     const continuar=require('../Interprete/Instrucciones/sent_transfer/Sentcontinue')
     const casteo=require('../Interprete/Expresiones/Casteo')
     const nativas=require('../Interprete/Expresiones/Nativas/Nativas')
+    const ternario=require('../Interprete/Expresiones/Ternario')
     const vector= require('../Interprete/Instrucciones/Decla_Vector')
     const access_vector=require('../Interprete/Expresiones/Accesovector')
     const get_lista= require('../Interprete/Expresiones/Get_lis')
@@ -168,6 +173,7 @@ caracter         (\'({escape2} | {aceptacion2})\')
     const declalista = require('../Interprete/Instrucciones/Decla_lista')
     const apendlist =  require('../Interprete/Instrucciones/Append_list')
     const set_lista = require('../Interprete/Instrucciones/Set_list')
+    const errores = require('../Interprete/Ast/Errores')
 
 %}
 
@@ -175,6 +181,7 @@ caracter         (\'({escape2} | {aceptacion2})\')
 %left 'OR'
 %left 'AND'
 %right 'NOT'
+%left 'TERNARIO' 
 %left 'IGUALIGUAL' 'DIFERENTE' 'MENORQUE' 'MENORIGUAL' 'MAYORQUE' 'MAYORIGUAL'
 %left 'MAS' 'MENOS'
 %left 'MULTI' 'DIV'
@@ -218,6 +225,9 @@ instruccion : declaracion                   { $$ = $1; }
             | set_lista                     { $$ = $1; }
             | decla_vector                  { $$ = $1; }
             | set_vector                    { $$ = $1; }
+            | error {console.log("Error Sintactico: "+ yytext+" linea: "+this._$.first_line + " Columna: "+this._$.first_column);
+                   $$= new errores.default("sintactico","No se esperaba el caracter: "+yytext,this._$.first_line,this._$.first_column);
+                    }
             ;
 
 
@@ -244,7 +254,7 @@ asignaciones : ID IGUAL exp  { $$ = new asignacion.default($1,$3,((@1.first_line
 
 // INSTRUCIONES DE LISTAS
 declalista : RDYNAMICLIST MENORQUE tipo MAYORQUE ID IGUAL RNEW RDYNAMICLIST MENORQUE tipo MAYORQUE PYC { $$= new declalista.default($3,$5,@1.first_line,@1.first_column);}
-        | RDYNAMICLIST MENORQUE tipo MAYORQUE ID IGUAL RTOCHARARRAY PARA exp PARC PYC {$$= new vector.default(3,$3,$5,$9,@1.first_line,@1.first_column);}
+        | RDYNAMICLIST MENORQUE tipo MAYORQUE ID IGUAL RTOCHARARRAY PARA exp PARC PYC  { $$= new declalista.default($3,$5,@1.first_line,@1.first_column,$9);}
     ;
 
 lista_append: RAPPEND PARA ID COMA exp PARC PYC {$$ = new  apendlist.default($3,$5,@1.first_line,@1.first_column);}
@@ -325,8 +335,10 @@ funciones : tipo ID PARA lista_params PARC LLAVEA instrucciones LLAVEC { $$ = ne
         | RVOID ID PARA  PARC LLAVEA instrucciones LLAVEC               {$$ = new func.default(3, $1, $2,[],true, $6,  @1.first_line, @1.last_column); }
         ;
 
-lista_params : lista_params COMA tipo ID          { $$ = $1; $$.push(new simbolo.default(6, $3, $4, null)); }
-             | tipo ID                           { $$ = new Array(); $$.push(new simbolo.default(6, $1, $2, null)); }
+lista_params : lista_params COMA tipo ID                { $$ = $1; $$.push(new simbolo.default(6, $3, $4, null)); }
+             | tipo ID                                  { $$ = new Array(); $$.push(new simbolo.default(6, $1, $2, null)); }
+             | lista_params COMA RDYNAMICLIST MENORQUE tipo MAYORQUE ID { $$ = $1; $$.push(new simbolo.default(5, $5, $7, null)); }
+             | RDYNAMICLIST MENORQUE tipo MAYORQUE ID                   { $$ = new Array(); $$.push(new simbolo.default(5, $3, $5, null)); }
              ;
 
 
@@ -378,5 +390,6 @@ exp : exp MAS exp        { $$ = new aritmetica.default($1, '+',$3,((@1.first_lin
     | RTOCHARARRAY PARA exp PARC{$$ = new nativas.default("tochararray",$3,@3.first_line,@3.first_column);}
     | get_lista              { $$= $1; }
     | get_vector             { $$=$1;   }
+    | exp TERNARIO exp RDOSPTS exp {$$= new ternario.default($1,$3,$5,@1.first_line,@1.first_column);}
     ;
 

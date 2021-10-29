@@ -5,7 +5,7 @@ import { Expresion } from "../Interfaces/Expresion";
 import { Instruccion } from "../Interfaces/Instruccion";
 import Simbolo from "../TablaSimbolos/Simbolos";
 import TablaSimbolos from "../TablaSimbolos/TablaSimbolos";
-import { tipo } from "../TablaSimbolos/Tipo";
+import Tipo, { tipo } from "../TablaSimbolos/Tipo";
 import Funciones from "./funciones";
 
 import Sent_return from "./sent_transfer/Sent_return";
@@ -117,15 +117,17 @@ export default class Llamada implements Instruccion, Expresion{
             es igual a la cantidad de parámetros que posee el método. */
         if(parametros_llamada.length == parametros_funcion.length){
             //--> parametros desde funcion/metodo
+            console.log("los la cant de params son iguales")
             let aux : Simbolo; // -> parametro
             let aux_id : string; // -> id parametro 
             let aux_tipo; //-> tipo parametro 
+            let simbolo_func_lista;
 
             //--> valores de la llamada
             let aux_exp : Expresion; //-> expresion que se le va a asignar al parametro 
             let aux_exp_tipo; //-> tipo de la expresio 
             let aux_exp_valor;  //-> valor de la expresion 
-
+            let simbolo_llam_lista;
             // 5. Verificar que cada valor a asignar sea del mismo tipo de los parametros del metodo.
             for(let i = 0; i < parametros_llamada.length ; i++){
                 // void suma( int n1 , int n2){... }
@@ -134,19 +136,38 @@ export default class Llamada implements Instruccion, Expresion{
                 //--> vamos a guardar la informacion del parametro de la funcion
                 aux = parametros_funcion[i] as Simbolo;
                 aux_id = aux.identificador;
-                aux_tipo = aux.tipo.enum_tipo; // ENTERO, DOBLE 
+                aux_tipo = aux.tipo.enum_tipo; // ENTERO, DOBLE
+                simbolo_func_lista= aux.simbolo;
+               // console.log("id del param de la funcion"+aux_id)
+               // console.log("tipo del param de la func"+aux_tipo)
+               // console.log("#de simbolo"+simbolo_func_lista)
 
                 //--> Vamos a guardar la informacion del parametro de la llamada
                 aux_exp = parametros_llamada[i] as Expresion;
                 aux_exp_tipo = aux_exp.getTipo(controlador, ts);
                 aux_exp_valor = aux_exp.getValor(controlador,ts);
+                //console.log("valor del param de la llamda "+aux_exp_valor)
+                //console.log("tipo del param de la llamada "+aux_exp_tipo)
 
                 // validar si el valor del parametro de llamada es igual al valor del parametro de la funcion
                 if(aux_tipo == aux_exp_tipo){
                       // 5. a) Si son del mismo tipo se debe de guardar cada parámetro con su valor en la tabla de símbolos local. 
-                      
+                      console.log("aqui si no es lista")
+                    
                       let simbolo = new Simbolo(aux.simbolo, aux.tipo, aux_id, aux_exp_valor);
                       ts_local.agregar(aux_id, simbolo);
+                }
+                else if(simbolo_func_lista == 5 && aux_exp_tipo == 7){
+                    //console.log("aqui porque es lista")
+                    //console.log("tamalo lista"+aux_exp_valor.lista.length)
+                    if(aux_tipo == tipo.CARACTER){
+
+                    let nLista= new Tipo("LISTA");
+                    
+                    let simbolo = new Simbolo(aux.simbolo,nLista, aux_id, aux_exp_valor);
+                      ts_local.agregar(aux_id, simbolo);
+                    }
+
                 }
             }
             return true;

@@ -25,11 +25,15 @@ export default class Funciones extends Simbolo implements Instruccion{
     }
 
     //-- agregamos un metodo para agregar el simbolo de la funcion a la tabla de simbolos
-    agregarFuncionTS(ts: TablaSimbolos){
+    agregarFuncionTS(controlador: Controlador,ts: TablaSimbolos){
          if(!(ts.existe(this.identificador))){
              ts.agregar(this.identificador, this);
          }else{
              // error semantico.
+             let error = new Errores("Semantico",`La funcion ${this.identificador} no puede ser agregada porque ya existe en la tabla de simbolos`,this.linea,this.columna);
+             controlador.errores.push(error);
+             controlador.append(`**Error:Semantico, en la linea ${this.linea} y columna ${this.columna},La funcion ${this.identificador} no puede ser agregada porque ya existe en la tabla de simbolos`);
+             return tipo.ERROR;
          }
     }
 

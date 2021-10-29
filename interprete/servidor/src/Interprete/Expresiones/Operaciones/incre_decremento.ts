@@ -5,6 +5,7 @@ import TablaSimbolos from "../../TablaSimbolos/TablaSimbolos";
 import Operacion,{Operador} from "./Operacion";
 import { tipo } from "../../TablaSimbolos/Tipo";
 import Nodo from "../../Ast/Nodo";
+import Errores from "../../Ast/Errores";
 
 
 export default class incre_decremento implements Expresion {
@@ -31,7 +32,9 @@ export default class incre_decremento implements Expresion {
 
             return existe_id.tipo.enum_tipo;
         }else{
-
+            let error= new Errores("Semantico",`El id: ${this.identificador} no existe en la tabla de simbolos, no se puede efecutar el incremento`,this.linea,this.columna);
+            controlador.errores.push(error);
+            controlador.append(`Error:Semantico, en la liena ${this.linea} y columna: ${this.columna},El id: ${this.identificador} no existe en la tabla de simbolos, no se puede efecutar el incremento `);
             return tipo.ERROR;
         }
         

@@ -1,3 +1,4 @@
+import Errores from "../Ast/Errores";
 import Nodo from "../Ast/Nodo";
 import Controlador from "../Controlador";
 import { Expresion } from "../Interfaces/Expresion";
@@ -66,12 +67,21 @@ export default class Get_list implements Expresion{
                 }else{
     
                     //re´portamos que no es tipo lista
+
+                    let error = new Errores("Semantico","el tipo al que se le quiere aplicar el metodo no es una lista",this.linea,this.columna);
+                    controlador.errores.push(error);
+                    controlador.append(`**Errore:Semantico, en la linea ${this.linea} y columna ${this.columna}, el tipo al que se le quiere aplicar el metodo no es una lista`);
+                    return tipo.ERROR;
                 }
     
     
             }else{
     
                 //reportamos que el id no existe
+                let error = new Errores("Semantico",` la lista${this.id_lista} no existe`,this.linea,this.columna);
+                controlador.errores.push(error);
+                controlador.append(`**Error:Semantico, en la lienea ${this.linea} y columna: ${this.columna},la lista${this.id_lista} no existe `)
+                return tipo.ERROR;
             }
         }
         
@@ -97,16 +107,21 @@ export default class Get_list implements Expresion{
                     if(val_index < lalista.length){
 
                         let val_acceso=lalista[val_index];
-                        console.log("el valor retornado lista "+val_acceso)
+                       // console.log("el valor retornado lista "+val_acceso)
                         return val_acceso;
                     }else{
 
                         //retornamos que el index esta fuera de rango 
+                        let error = new Errores("semantico","El indice se encuentra fuera del rango",this.linea,this.columna);
+                        controlador.errores.push(error);
+                        controlador.append(`**Error:Semantico, en la liena ${this.linea} y columna ${this.columna}, el indice esta fuera de rango`);
+                        return null;
+
                     }
 
                 }else{  
 
-                    //retornamos que no es vector
+                    //retornamos que no es lista
                 }
 
             }else{
@@ -117,6 +132,10 @@ export default class Get_list implements Expresion{
         }else{
 
             //retornar que el index no es int
+            let error = new Errores("Semantico","El indice no es de tipo Entero",this.linea,this.columna);
+            controlador.errores.push(error);
+            controlador.append(`**Error:Semantico, en la linea ${this.linea} y colummna ${this.columna}.El indice no es de tipo entero`);
+            return null;
         }
 
     }

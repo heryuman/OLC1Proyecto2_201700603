@@ -46,7 +46,7 @@ constructor(tipo_declaracion:number,tipo_vector:Tipo,id_vector:string,exp:any,li
             let error =new Errores("Semantico","El id del vector ya existe en el entorno actual",this.linea,this.columna);
             controlador.errores.push(error);
             controlador.append(`**Error:Semantico, en la linea ${this.linea} y columna: ${this.columna}, el Id, del vector ya se encuentra declarado`);
-    
+            return tipo.ERROR;
          }
 
          if ( this.tipo_declaracion==1){
@@ -126,6 +126,15 @@ constructor(tipo_declaracion:number,tipo_vector:Tipo,id_vector:string,exp:any,li
                 let nSimbolo= new Simbolo(4,nVector,this.id_vector,nObjv);
                 ts.agregar(this.id_vector,nSimbolo);
             }
+            else{
+
+                let error = new Errores("Semantico",`El tipo asignado al vector ${this.id_vector} no corresponde a un tipo válido `,this.linea,this.columna);
+                controlador.errores.push(error);
+                controlador.append(`**Error:Semantico, en la linea ${this.linea} y columna ${this.columna}, El tipo asignado al vector ${this.id_vector} no corresponde a un tipo válido`);
+                return tipo.ERROR;
+
+
+            }
 
 
          }
@@ -160,31 +169,7 @@ constructor(tipo_declaracion:number,tipo_vector:Tipo,id_vector:string,exp:any,li
             
          }
 
-         else if(this.tipo_declaracion == 3){
-            //para el tocharArray()
-            console.log("hay un vector tipo 3")
-            console.log("el tipo del vector es= "+this.tipo_vector.enum_tipo)
-            if(this.tipo_vector.enum_tipo == tipo.CARACTER){
-                let nVector= new Tipo("VECTOR");
-                let tipo_exp= this.exp.getTipo(controlador,ts);
-                let valor_exp= this.exp.getValor(controlador,ts);
-
-                if(tipo_exp == tipo.CADENA){
-
-                   let lista_char= Array.from(valor_exp);
-                   let nObjv= new Obj_vector(lista_char,this.tipo_vector,lista_char.length);
-                   console.log("listachar "+lista_char.length)
-                   let nSimbolo= new Simbolo(4,nVector,this.id_vector,nObjv);
-                   ts.agregar(this.id_vector,nSimbolo);
-                }
-
-                
-   
-
-            }
-          
-
-         }
+    
 
 
  }

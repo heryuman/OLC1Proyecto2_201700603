@@ -3,6 +3,7 @@ import Controlador  from "../Controlador";
 import TablaSimbolos from "../TablaSimbolos/TablaSimbolos";
 import { tipo } from "../TablaSimbolos/Tipo";
 import Nodo from "../Ast/Nodo";
+import Errores from "../Ast/Errores";
 
 
 export default class Identificador implements Expresion{
@@ -23,9 +24,12 @@ export default class Identificador implements Expresion{
 
         if(existe_id != null){
 
-            console.log("encontramos el tipo: "+existe_id.tipo.enum_tipo)
+           // console.log("encontramos el tipo: "+existe_id.tipo.enum_tipo)
             return existe_id.tipo.enum_tipo;
         }else{
+            let error = new Errores("Semantico",`El identificador ${this.identificador} no existe en la tabla de simbolos`,this.linea,this.columna)
+            controlador.errores.push(error);
+            controlador.append(`!Error:Semantico, en la linea ${this.linea} y columna ${this.columna}, el id:${this.identificador} no existe en la tabla de simbolos`);
             return tipo.ERROR;
         }
 
@@ -50,13 +54,13 @@ export default class Identificador implements Expresion{
         let existe_id = ts.getSimbolo(this.identificador);
 
         if(existe_id != null){
-            console.log("el simbolo "+existe_id.simbolo)
+            //console.log("el simbolo "+existe_id.simbolo)
            if(existe_id.simbolo ==4){
             return existe_id.valor.size;
            }
            else if(existe_id.simbolo == 5){
-                console.log("retornamos: "+existe_id.valor.lista.length)
-                return existe_id.valor.lista.length/2;
+              //  console.log("retornamos: "+existe_id.valor.lista.length)
+                return existe_id.valor.lista.length;
            }else{
 
             return 0;

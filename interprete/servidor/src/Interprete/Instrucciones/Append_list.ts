@@ -41,20 +41,29 @@ export default class Append_list implements Instruccion{
 
                 }else{
 
-                    //reportar que no es el tipo no es igual al de la lista
+                    //reportar queel tipo del dato no es igual al de la lista
                     let error= new Errores("Semantico","El tipo de dato a agregar no corresponde al tipo de la lista",this.linea,this.columana);
                     controlador.errores.push(error);
                     controlador.append(`**Error:Semantico, en la linea ${this.linea} y columna ${this.columana}, El tipo de dato a agregar no corresponde al tipo de la lista`);
+                    return tipo.ERROR;
                 }
 
             }else{
 
                 //reportar que no es lista
+                let erro= new Errores("Semantico","El simbolo no es una lista",this.linea,this.columana);
+                controlador.errores.push(erro);
+                controlador.append(`!Error:Semantico, en la linea ${this.linea} y columna ${this.columana}, el simbolo no es una lista`);
+                return tipo.ERROR;
             }
 
         }else{
 
             //reportar que no existe
+            let erro= new Errores("Semantico",`El id: ${this.id_lista} de la lista no aparece en la tabla de simbolos`,this.linea,this.columana);
+            controlador.errores.push(erro);
+            controlador.append(`!Error:Semantico, en la linea ${this.linea} y columna ${this.columana}, eEl id: ${this.id_lista} de la lista no aparece en la tabla de simbolos`);
+            return tipo.ERROR;
         }
 
     }

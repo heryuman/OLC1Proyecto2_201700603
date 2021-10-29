@@ -1,3 +1,4 @@
+import Errores from "../Ast/Errores";
 import Nodo from "../Ast/Nodo";
 import Controlador from "../Controlador";
 import { Expresion } from "../Interfaces/Expresion";
@@ -51,27 +52,47 @@ if(ts.existe(this.id_list)){
 
 
                 }else{
-                    //retornar que el nuevo item no tiene el tipo del vector
+                    //retornar que el nuevo item no tiene el tipo de la lista
+                    let error = new Errores("Semantico", `El tipo de dato del nuevo item no corresponde al tipo de la lista ${this.id_list}`,this.linea,this.columna);
+                    controlador.errores.push(error);
+                    controlador.append(`**Error:Semantico en la linea ${this.linea} y columna ${this.columna},El tipo de dato del nuevo item no corresponde al tipo de la lista ${this.id_list} `)
+                    return tipo.ERROR;
 
                 }
             }else{
 
                 //retornar que esta fuera del rango
+                let error = new Errores("Semantico",`el indice de la lista ${this.id_list}, se encuentra fuera de rango`,this.linea,this.columna);
+                controlador.errores.push(error);
+                controlador.append(`**Error:Semantico, en la linea ${this.linea} y columna ${this.columna},el indice de la lista ${this.id_list}, se encuentra fuera de rango`);
+                return tipo.ERROR;
             }
 
         }else{
 
             //retorna que no es entero
+            let error = new Errores("Semantico",`el indice de la lista ${this.id_list}, no es entero`,this.linea,this.columna);
+            controlador.errores.push(error);
+            controlador.append(`**Error:Semantico, en la linea ${this.linea} y columna ${this.columna},el indice de la lista ${this.id_list}, no es entero`);
+            return tipo.ERROR;
         }
 
     }else{
 
         //retornar que no es lista
+        let error = new Errores("Semantico",`el id: ${this.id_list}, no es una lista`,this.linea,this.columna);
+        controlador.errores.push(error);
+        controlador.append(`**Error:Semantic, en la linea ${this.linea} y columna ${this.columna},el id: ${this.id_list}, no es una lista`);
+        return tipo.ERROR;
     }
 
 }else{
 
     //retornar que no existe
+    let error = new Errores("Semantico",`el simbolo: ${this.id_list}, no  se encuentra en la tabla de simbolso`,this.linea,this.columna);
+    controlador.errores.push(error);
+    controlador.append(`**Error:Semantic, en la linea ${this.linea} y columna ${this.columna},el simbolo: ${this.id_list}, no  se encuentra en la tabla de simbolso`);
+    return tipo.ERROR;
 
 
 }

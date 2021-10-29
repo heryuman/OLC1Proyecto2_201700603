@@ -1,3 +1,5 @@
+import { lista_errores } from "./Lista_Errores";
+
 export default class Errores{
 
     public tipo : string;
@@ -10,5 +12,17 @@ export default class Errores{
         this.descripcion = descripcion;
         this.linea = linea;
         this.columna = columna;
+
+        if(tipo.toLowerCase()=="sintactico" || tipo.toLowerCase() == "lexico"){
+
+            console.log("se alamacena un error de tipo: "+tipo.toLowerCase())
+            lista_errores.L_Errores.push(this);// this es todo lo que contiene el constructor
+
+        }
+    }
+
+    ejecutar(){
+
+        
     }
 }

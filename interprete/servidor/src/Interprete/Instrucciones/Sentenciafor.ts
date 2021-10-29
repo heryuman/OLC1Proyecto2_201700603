@@ -72,9 +72,9 @@ export default class Sentfor implements Instruccion{
 
 
        }else{
-        let error = new Errores("Semantico", `La condicion no es booleana y eso produjo un error.`, this.linea, this.columna);
+        let error = new Errores("Semantico", `La condicion de la sentencia for no es booleana.`, this.linea, this.columna);
             controlador.errores.push(error);
-            controlador.append(` *** ERROR: Semántico, La condicion no es booleana y eso produjo un error. En la línea ${this.linea} y columna ${this.columna}`);
+            controlador.append(` *** ERROR: Semántico, La condicion de la sentencia for no es booleana, En la línea ${this.linea} y columna ${this.columna}`);
             return tipo.ERROR;
 
        }

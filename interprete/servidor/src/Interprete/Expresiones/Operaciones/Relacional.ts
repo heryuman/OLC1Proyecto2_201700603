@@ -156,12 +156,7 @@ export default class Relacionales extends Operacion implements Expresion{
                         controlador.append(` *** ERROR: Semántico, Incompatibilidad de tipos, no se puede operar porque se produjo un error. En la línea ${this.linea} y col ${this.col}`);
                         return  null;
                     }
-                }/*else{
-                    let error = new Errores("Semantico", `Incompatibilidad de tipos, no se puede operar  porque se produjo un error.`, this.linea, this.col);
-                    controlador.errores.push(error);
-                    controlador.append(` *** ERROR: Semántico, Incompatibilidad de tipos, no se puede operar porque se produjo un error. En la línea ${this.linea} y col ${this.col}`);
-                    return null;
-                }*/
+                }
                 break;
             case Operador.DIFERENCIA:
                 if(tipo_exp1 == tipo.ENTERO){
@@ -231,12 +226,7 @@ export default class Relacionales extends Operacion implements Expresion{
                         controlador.append(` *** ERROR: Semántico, Incompatibilidad de tipos, no se puede operar porque se produjo un error. En la línea ${this.linea} y col ${this.col}`);
                         return  null;
                     }
-                }/*else{
-                    let error = new Errores("Semantico", `Incompatibilidad de tipos, no se puede operar  porque se produjo un error.`, this.linea, this.col);
-                    controlador.errores.push(error);
-                    controlador.append(` *** ERROR: Semántico, Incompatibilidad de tipos, no se puede operar porque se produjo un error. En la línea ${this.linea} y col ${this.col}`);
-                    return null;
-                }*/
+                }
                 break;
             case Operador.MENQUE:
                 if(tipo_exp1 == tipo.ENTERO){
@@ -376,12 +366,7 @@ export default class Relacionales extends Operacion implements Expresion{
                         controlador.append(` *** ERROR: Semántico, Incompatibilidad de tipos, no se puede operar porque se produjo un error. En la línea ${this.linea} y col ${this.col}`);
                         return  null;
                     }
-                }/*else{
-                    let error = new Errores("Semantico", `Incompatibilidad de tipos, no se puede operar  porque se produjo un error.`, this.linea, this.col);
-                    controlador.errores.push(error);
-                    controlador.append(` *** ERROR: Semántico, Incompatibilidad de tipos, no se puede operar porque se produjo un error. En la línea ${this.linea} y col ${this.col}`);
-                    return null;
-                }*/
+                }
                 break;
             case Operador.MAYQUE:
                 if(tipo_exp1 == tipo.ENTERO){
@@ -516,20 +501,12 @@ export default class Relacionales extends Operacion implements Expresion{
                         controlador.append(` *** ERROR: Semántico, Incompatibilidad de tipos, no se puede operar porque se produjo un error. En la línea ${this.linea} y col ${this.col}`);
                         return  null;
                     }
-                }/*else{
-                    let error = new Errores("Semantico", `Incompatibilidad de tipos, no se puede operar  porque se produjo un error.`, this.linea, this.col);
-                    controlador.errores.push(error);
-                    controlador.append(` *** ERROR: Semántico, Incompatibilidad de tipos, no se puede operar porque se produjo un error. En la línea ${this.linea} y col ${this.col}`);
-                    return null;
-                }*/
+                }
                 break;
             default:
                 break;
         }
-        /*let error = new Errores("Semantico", `Incompatibilidad de tipos, no se puede operar  porque se produjo un error.`, this.linea, this.col);
-        controlador.errores.push(error);
-        controlador.append(` *** ERROR: Semántico, Incompatibilidad de tipos, no se puede operar porque se produjo un error. En la línea ${this.linea} y col ${this.col}`);
-        return  null;*/
+       
     }
     recorrer(): Nodo {
         throw new Error("Method not implemented.");

@@ -4,7 +4,7 @@ import Errores from "../../Ast/Errores";
 import Nodo from "../../Ast/Nodo";
 import Controlador from "../../Controlador";
 
-import Decla_Vector from "../../Instrucciones/Decla_Vector";
+
 import { Expresion } from "../../Interfaces/Expresion";
 import TablaSimbolos from "../../TablaSimbolos/TablaSimbolos";
 import Tipo, { tipo } from "../../TablaSimbolos/Tipo";
@@ -44,6 +44,12 @@ export default class Nativas implements Expresion{
                 
 
                 return tipo.CADENA;
+            }else{
+
+                let error= new Errores("Semantico",`el tipo de la expresion no es admitida por la funcion ${nativa}`,this.linea,this.columna);
+                controlador.errores.push(error);
+                controlador.append(`**Error:Semantico,en la linea ${this.linea} y columna ${this.columna}, el tipo de la expresion no es admitida por la funcion ${nativa}`)
+                return tipo.ERROR;
             }
 
             
@@ -59,9 +65,15 @@ export default class Nativas implements Expresion{
 
         else if(nativa == "length"){
 
-            if(tipo_exp == tipo.CADENA || tipo_exp == tipo.VECTOR || tipo_exp== tipo.LISTA){// falta verifcar que sea tipo lista o vector
+            if(tipo_exp == tipo.CADENA || tipo_exp == tipo.VECTOR || tipo_exp== tipo.LISTA){
 
                 return tipo.ENTERO;
+            }else{
+
+                let error= new Errores("Semantico",`el tipo de la expresion no es admitida por la funcion ${nativa}`,this.linea,this.columna);
+                controlador.errores.push(error);
+                controlador.append(`**Error:Semantico,en la linea ${this.linea} y columna ${this.columna}, el tipo de la expresion no es admitida por la funcion ${nativa}`)
+                return tipo.ERROR;
             }
 
            
@@ -76,6 +88,12 @@ export default class Nativas implements Expresion{
             else if(tipo_exp== tipo.DOBLE){
 
                 return tipo.DOBLE;
+            }else{
+
+                let error= new Errores("Semantico",`el tipo de la expresion no es admitida por la funcion ${nativa}`,this.linea,this.columna);
+                controlador.errores.push(error);
+                controlador.append(`**Error:Semantico,en la linea ${this.linea} y columna ${this.columna}, el tipo de la expresion no es admitida por la funcion ${nativa}`)
+                return tipo.ERROR;
             }
         }
 
@@ -89,6 +107,12 @@ export default class Nativas implements Expresion{
             else if(tipo_exp == tipo.DOBLE){
 
                 return tipo.DOBLE;
+            }else{
+
+                let error= new Errores("Semantico",`el tipo de la expresion no es admitida por la funcion ${nativa}`,this.linea,this.columna);
+                controlador.errores.push(error);
+                controlador.append(`**Error:Semantico,en la linea ${this.linea} y columna ${this.columna}, el tipo de la expresion no es admitida por la funcion ${nativa}`)
+                return tipo.ERROR;
             }
         }
 
@@ -97,7 +121,13 @@ export default class Nativas implements Expresion{
              if(tipo_exp== tipo.BOOLEANO || tipo_exp== tipo.CADENA || tipo_exp== tipo.CARACTER || tipo_exp== tipo.DOBLE || tipo_exp== tipo.ENTERO ){ // falta poner tipo lista,vector
 
                 return tipo.CADENA;
-             }
+             }else{
+
+                let error= new Errores("Semantico",`el tipo de la expresion no es admitida por la funcion ${nativa}`,this.linea,this.columna);
+                controlador.errores.push(error);
+                controlador.append(`**Error:Semantico,en la linea ${this.linea} y columna ${this.columna}, el tipo de la expresion no es admitida por la funcion ${nativa}`)
+                return tipo.ERROR;
+            }
             
         }
 
@@ -111,6 +141,12 @@ export default class Nativas implements Expresion{
             else if(tipo_exp== tipo.BOOLEANO){
 
                 return tipo.CADENA;
+            }else{
+
+                let error= new Errores("Semantico",`el tipo de la expresion no es admitida por la funcion ${nativa}`,this.linea,this.columna);
+                controlador.errores.push(error);
+                controlador.append(`**Error:Semantico,en la linea ${this.linea} y columna ${this.columna}, el tipo de la expresion no es admitida por la funcion ${nativa}`)
+                return tipo.ERROR;
             }
         }
 
@@ -120,6 +156,12 @@ export default class Nativas implements Expresion{
 
                 console.log("aqui se debe retornar el tipo array");
                 return tipo.VECTOR;
+            }else{
+
+                let error= new Errores("Semantico",`el tipo de la expresion no es admitida por la funcion ${nativa}`,this.linea,this.columna);
+                controlador.errores.push(error);
+                controlador.append(`**Error:Semantico,en la linea ${this.linea} y columna ${this.columna}, el tipo de la expresion no es admitida por la funcion ${nativa}`)
+                return tipo.ERROR;
             }
             
 
@@ -166,7 +208,7 @@ export default class Nativas implements Expresion{
  
          else if(nativa == "length"){
  
-             if(tipo_exp == tipo.CADENA ){// falta verifcar que sea tipo lista o vector
+             if(tipo_exp == tipo.CADENA ){
  
                  return val_exp.length;
              }

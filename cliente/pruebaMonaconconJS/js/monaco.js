@@ -45,5 +45,28 @@ function sendData(){
 
 }
 
-// Themes: vs-dark , hc-black
-// language: text/html , javascript
+function readSingleFile(e) {
+
+
+
+    console.log("en ReadSinglefile");
+    var file = e.target.files[0];
+    if (!file) {
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var contents = e.target.result;
+      console.log(contents);
+      displayContents(contents);
+    };
+    reader.readAsText(file);
+  }
+  
+  function displayContents(contents) {
+    //editor.setValue(contents);
+    
+  }
+  
+  document.getElementById('file-input')
+    .addEventListener('change', readSingleFile, false);

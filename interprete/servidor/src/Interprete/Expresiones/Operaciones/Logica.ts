@@ -1,3 +1,4 @@
+import Errores from "../../Ast/Errores";
 import Controlador from "../../Controlador";
 import { Expresion } from "../../Interfaces/Expresion";
 import TablaSimbolos from "../../TablaSimbolos/TablaSimbolos";
@@ -25,6 +26,9 @@ export default class Logica extends Operacion implements Expresion{
 
             if(tipo_exp1==tipo.ERROR || tipo_exp2 == tipo.ERROR){
 
+                let error= new Errores("semantico","la expresion1/Expresion2 contienen un error por lo que no se puede efectuar la operacion logica",this.linea,this.col);
+                controlador.errores.push(error);
+                controlador.append(`!Error:Semantico, en la linea ${this.linea} y columna: ${this.col},la expresion1/Expresion2 contienen un error por lo que no se puede efectuar la operacion logica `);
                 return tipo.ERROR;
             }
 
@@ -33,6 +37,9 @@ export default class Logica extends Operacion implements Expresion{
             tipo_exp1 = this.exp1.getTipo(controlador,ts);
             if(tipo_exp1== tipo.ERROR){
 
+                let error= new Errores("semantico","la expresion1 contiene un error por lo que no se puede efectuar la operacion logica",this.linea,this.col);
+                controlador.errores.push(error);
+                controlador.append(`!Error:Semantico, en la linea ${this.linea} y columna: ${this.col},la expresion1 contiene un error por lo que no se puede efectuar la operacion logica `);
                 return tipo.ERROR;
             }
             tipo_exp2=tipo.ERROR;
@@ -45,7 +52,20 @@ export default class Logica extends Operacion implements Expresion{
                     if (tipo_exp2== tipo.BOOLEANO){
 
                         return tipo.BOOLEANO;
+                    }else{
+                        let error= new Errores("semantico","La expresion derecha no es de tipo booleano",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`!Error:Semantico, en la linea: ${this.linea} y columna: ${this.col}, La expresion derecha no es de tipo booleana`);
+                        return tipo.ERROR;
+    
                     }
+                }
+                else{
+                    let error= new Errores("semantico","La expresion izquierda no es de tipo booleano",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`!Error:Semantico, en la linea: ${this.linea} y columna: ${this.col}, La expresion izquierda no es de tipo booleana`);
+                    return tipo.ERROR;
+
                 }
             case Operador.OR:
                     if (tipo_exp1 == tipo.BOOLEANO){
@@ -54,14 +74,31 @@ export default class Logica extends Operacion implements Expresion{
     
                             return tipo.BOOLEANO;
                         }
+                        else{
+                            let error= new Errores("semantico","La expresion derecha no es de tipo booleano",this.linea,this.col);
+                            controlador.errores.push(error);
+                            controlador.append(`!Error:Semantico, en la linea: ${this.linea} y columna: ${this.col}, La expresion derecha no es de tipo booleana`);
+                            return tipo.ERROR;
+        
+                        }
+                    }else{
+                        let error= new Errores("semantico","La expresion izquierda no es de tipo booleano",this.linea,this.col);
+                        controlador.errores.push(error);
+                        controlador.append(`!Error:Semantico, en la linea: ${this.linea} y columna: ${this.col}, La expresion izquierda no es de tipo booleana`);
+                        return tipo.ERROR;
+    
                     }
             case Operador.NOT:
                 if(tipo_exp1 == tipo.BOOLEANO){
 
                     return tipo.BOOLEANO;
-                }else{
-
+                }
+                else{
+                    let error= new Errores("semantico","La expresion  no es de tipo booleano",this.linea,this.col);
+                    controlador.errores.push(error);
+                    controlador.append(`!Error:Semantico, en la linea: ${this.linea} y columna: ${this.col}, La expresion no es de tipo booleana`);
                     return tipo.ERROR;
+
                 }
                 
                 break;
