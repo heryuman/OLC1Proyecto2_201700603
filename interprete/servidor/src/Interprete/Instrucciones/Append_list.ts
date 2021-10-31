@@ -69,6 +69,15 @@ export default class Append_list implements Instruccion{
     }
 
     recorrer():Nodo{
-        throw new Error("")
+        let padre = new Nodo("Append_list","");
+        padre.AddHijo(new Nodo("append",""));
+        padre.AddHijo(new Nodo("(",""));
+        padre.AddHijo(new Nodo(this.id_lista,""));
+        padre.AddHijo(new Nodo(",",""));
+        padre.AddHijo(this.expresion.recorrer());
+        padre.AddHijo(new Nodo(")",""));
+
+        return padre;
+
     }
 }

@@ -81,6 +81,13 @@ export default class Decla_lista implements Instruccion{
                 }
 
 
+            }else{
+
+                let error = new Errores("Semantico",`la lista ${this.id_lista}, declarada, no es de tipo char`,this.linea,this.columna);
+                controlador.errores.push(error);
+                controlador.append(`**Error:Semantico, en la linea ${this.linea} y columna ${this.columna}, la lista ${this.id_lista}, declarada, no es de tipo char`);
+                return tipo.ERROR;
+
             }
 
 
@@ -90,7 +97,32 @@ export default class Decla_lista implements Instruccion{
     }
 
     recorrer():Nodo{
+        let  padre = new Nodo("Decla_List","");
+        padre.AddHijo(new Nodo("DynamicList",""));
+        padre.AddHijo(new Nodo("<",""));
+        padre.AddHijo(new Nodo(this.tipo_lista.nombre_tipo,""))
+        padre.AddHijo(new Nodo(">",""))
+        padre.AddHijo(new Nodo(this.id_lista,""));
+        padre.AddHijo(new Nodo("=",""));
+        if(this.expresion==undefined){
 
-        throw new Error("")
+            padre.AddHijo(new Nodo("new",""));
+            padre.AddHijo(new Nodo("DynamicList",""));
+            padre.AddHijo(new Nodo("<",""));
+            padre.AddHijo(new Nodo(this.tipo_lista.nombre_tipo,""))
+            padre.AddHijo(new Nodo(">",""))
+            padre.AddHijo(new Nodo(";",""));
+
+        }else{
+                padre.AddHijo(new Nodo("toCharArray",""));
+                padre.AddHijo(new Nodo("(",""));
+                padre.AddHijo(this.expresion.recorrer());
+                padre.AddHijo(new Nodo(")",""));
+                padre.AddHijo(new Nodo(";",""));
+            
+        }
+
+    return padre;
+        
     }
 }

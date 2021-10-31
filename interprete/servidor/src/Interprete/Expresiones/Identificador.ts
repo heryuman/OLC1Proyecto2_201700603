@@ -27,7 +27,7 @@ export default class Identificador implements Expresion{
            // console.log("encontramos el tipo: "+existe_id.tipo.enum_tipo)
             return existe_id.tipo.enum_tipo;
         }else{
-            let error = new Errores("Semantico",`El identificador ${this.identificador} no existe en la tabla de simbolos`,this.linea,this.columna)
+            let error = new Errores("Semantico",`El identificador " ${this.identificador} " no existe en la tabla de simbolos`,this.linea,this.columna)
             controlador.errores.push(error);
             controlador.append(`!Error:Semantico, en la linea ${this.linea} y columna ${this.columna}, el id:${this.identificador} no existe en la tabla de simbolos`);
             return tipo.ERROR;
@@ -46,7 +46,10 @@ export default class Identificador implements Expresion{
         }
     }
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        let padre= new Nodo("identificador","");
+        padre.AddHijo(new Nodo(this.identificador,""));
+    
+        return padre;
     }
 
     getSize(controlador:Controlador,ts:TablaSimbolos):number{

@@ -28,6 +28,17 @@ export default class Sent_return implements Instruccion{
 
     }
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        let padre = new Nodo("Sente_return","");
+        if(this.expresion != null){
+
+            padre.AddHijo(new Nodo("return",""))
+            padre.AddHijo(this.expresion.recorrer());
+            padre.AddHijo(new Nodo(";",""));
+        }else{
+
+            padre.AddHijo(new Nodo("return",""))
+            padre.AddHijo(new Nodo(";",""));
+        }
+        return padre;
     }
 }

@@ -13,7 +13,11 @@ export default class Detener implements Instruccion{
             return this;
         }
         recorrer(): Nodo {
-            throw new Error("Method not implemented.");
+            let padre= new Nodo("Sent_Break","");
+            padre.AddHijo(new Nodo("break",""));
+            padre.AddHijo(new Nodo(";",""));
+
+            return padre;
         }
     
 }

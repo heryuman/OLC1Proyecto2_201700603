@@ -29,7 +29,8 @@ export default class Caso implements Instruccion{
 
     ejecutar(controlador:Controlador, ts:TablaSimbolos){
         let ts_local= new TablaSimbolos(ts);
-        console.log("se ejecutara el caso");
+      
+        controlador.lista_ts.push(ts_local);
         let parar=false;
        
             
@@ -54,7 +55,27 @@ export default class Caso implements Instruccion{
 
     recorrer():Nodo{
 
-        throw new Error("Metodo no implementado");
+        let padre = new Nodo("Caso","");
+        padre.AddHijo(new Nodo("case",""));
+        if(this.default == false){
+            padre.AddHijo(this.condicion.recorrer());
+
+        }else{
+
+            padre.AddHijo(new Nodo("default",""));
+        }
+       
+        padre.AddHijo(new Nodo(":",""));
+        for(let inst of this.L_instrucciones){
+
+            padre.AddHijo(inst.recorrer());
+        }
+       
+      
+
+        return padre;
+        
+
     }
 
 

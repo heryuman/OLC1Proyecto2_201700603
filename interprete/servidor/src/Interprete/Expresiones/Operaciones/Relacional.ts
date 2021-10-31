@@ -328,7 +328,7 @@ export default class Relacionales extends Operacion implements Expresion{
                 }else if(tipo_exp1 == tipo.CARACTER){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE ){
                         let num_ascci = valor_exp1.charCodeAt(0);
-                        return num_ascci != valor_exp2; 
+                        return num_ascci <= valor_exp2; 
                     }else if(tipo_exp2 == tipo.CARACTER){
                         let num_ascci1 = valor_exp1.charCodeAt(0);
                         let num_ascci2 = valor_exp2.charCodeAt(0);
@@ -468,7 +468,7 @@ export default class Relacionales extends Operacion implements Expresion{
                 }else if(tipo_exp1 == tipo.CARACTER){
                     if(tipo_exp2 == tipo.ENTERO || tipo_exp2 == tipo.DOBLE ){
                         let num_ascci = valor_exp1.charCodeAt(0);
-                        return num_ascci != valor_exp2; 
+                        return num_ascci >= valor_exp2; 
                     }else if(tipo_exp2 == tipo.CARACTER){
                         let num_ascci1 = valor_exp1.charCodeAt(0);
                         let num_ascci2 = valor_exp2.charCodeAt(0);
@@ -509,7 +509,14 @@ export default class Relacionales extends Operacion implements Expresion{
        
     }
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        let padre = new Nodo("Exp","");
+      
+            padre.AddHijo(this.exp1.recorrer());
+            padre.AddHijo(new Nodo(this.sign_operador,""));
+            padre.AddHijo(this.exp2.recorrer());
+
+    return padre;
+        
     }
 
     getSize(controlador:Controlador,ts:TablaSimbolos):number{

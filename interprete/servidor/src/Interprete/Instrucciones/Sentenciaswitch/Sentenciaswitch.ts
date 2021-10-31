@@ -32,6 +32,7 @@ export default class Sentenciaswitch implements Instruccion{
     ejecutar(controlador:Controlador,ts:TablaSimbolos){
         console.log("dentro del switch");
         let ts_local=new TablaSimbolos(ts);
+        //controlador.lista_ts.push(ts_local);
         let siguiente_caso=false;
         for (let cases of this.casos){
 
@@ -118,11 +119,33 @@ export default class Sentenciaswitch implements Instruccion{
 
         }
 
+       
+
     }
 
     recorrer():Nodo{
 
-        throw new Error("Metodo no implementado");
+        let padre = new Nodo("Sentencia_Switch","");
+        padre.AddHijo(new Nodo("Switch",""));
+        padre.AddHijo(new Nodo("(",""));
+        padre.AddHijo(this.condicion.recorrer());
+        padre.AddHijo(new Nodo(")",""));
+        padre.AddHijo(new Nodo("{",""));
+
+        let hijo = new Nodo("casos","")
+        for( let caso of this.casos){
+            
+            hijo.AddHijo(caso.recorrer());
+            
+        }
+        padre.AddHijo(hijo);
+
+        padre.AddHijo(new Nodo("}",""));
+
+
+
+
+        return padre;
     }
 
 }

@@ -1,0 +1,81 @@
+.cont{
+
+    display: flex;
+    justify-content: center;
+  
+   
+  
+  
+     
+}
+.editor{
+
+    height: 461px;
+    width: 620px;
+    margin-top: 150px;
+    
+}
+
+.boton{
+
+    width: 150px;
+    margin-left: 20px;
+
+}
+
+.container-buttons{
+ 
+    padding: 15px;
+    position: fixed;
+    background-color: #566573;
+    z-index: 100;
+    width: 100%;
+    opacity: .85;
+
+}
+
+body{
+
+    background-color:#ABB2B9 ;
+}
+#consola{
+
+  width: 75%;
+  height: 450px;
+  border-radius: 15px;
+  
+
+}
+ textarea{
+
+    font-size: 11px;
+    color: red;
+    background-color: black;
+    text-align: justify;
+    box-sizing: content-box;
+}
+
+#file-input{
+
+    text-decoration: none;
+    color: transparent;
+    width: 180px;
+    margin-right: 10px;
+    
+}
+
+.editor {
+    margin-top: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    height: 300px;
+    width: 80%;
+    background-color: #e6e6eb;
+    border-radius:10px 10px 10px 10px;
+    color: rgb(3, 8, 5);
+}
+
+.btn_space{
+
+    margin-right:10px ;
+}

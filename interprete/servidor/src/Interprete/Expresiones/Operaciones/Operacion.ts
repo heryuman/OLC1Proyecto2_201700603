@@ -142,7 +142,10 @@ export default class Operacion implements Expresion {
         throw new Error("Method not implemented.");
     }
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        let padre = new Nodo("operacion","");
+           
+
+        return padre;
     }
 
 

@@ -36,7 +36,9 @@ export default class Primitivo implements Expresion{
 
     recorrer():Nodo{
 
-        throw new Error("Metodo no implementado");
+        let padre = new Nodo("Primitivo",""); //Primitivo -> "hola mundo"
+        padre.AddHijo(new Nodo(this.valor_primitivo.toString(),""));
+       return padre;
     }
 
     getSize(controlador:Controlador,ts:TablaSimbolos):number{

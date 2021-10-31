@@ -34,6 +34,7 @@ export default class Sentfor implements Instruccion{
     ejecutar(controlador:Controlador,ts:TablaSimbolos){
 
        let ts_local = new TablaSimbolos(ts);
+       controlador.lista_ts.push(ts_local);
        let temp= controlador.sent_ciclica;
        controlador.sent_ciclica=true;
        this.declafor.ejecutar(controlador,ts_local);
@@ -47,7 +48,7 @@ export default class Sentfor implements Instruccion{
         while(this.condicion.getValor(controlador,ts_local)){
 
             let ts_local2= new TablaSimbolos(ts_local);
-
+            controlador.lista_ts.push(ts_local2);
             for(let inst of this.list_instruciones){
 
                 let res= inst.ejecutar(controlador,ts_local2);
@@ -66,7 +67,7 @@ export default class Sentfor implements Instruccion{
                 }
 
             }
-           this.actualizacion.ejecutar(controlador,ts_local);
+           this.actualizacion.ejecutar(controlador,ts_local2);
           
         }
 
@@ -86,6 +87,28 @@ export default class Sentfor implements Instruccion{
 
     recorrer():Nodo{
 
-        throw new Error("Method not implemented.");
+        let padre = new Nodo("Ciclo","");
+        padre.AddHijo(new Nodo("For",""));
+        padre.AddHijo(new Nodo("(",""));
+        let hijo= new Nodo("Declaracion_for","");
+        hijo.AddHijo(this.declafor.recorrer());
+        padre.AddHijo(hijo);
+        padre.AddHijo(new Nodo(";",""));
+        let hijo2= new Nodo("Condicion","");
+        hijo2.AddHijo(this.condicion.recorrer());
+        padre.AddHijo(hijo2);
+        padre.AddHijo(new Nodo(";",""));
+        let hijo3= new Nodo("actualizaccion","");
+        hijo3.AddHijo(this.actualizacion.recorrer());
+        padre.AddHijo(hijo3);
+        padre.AddHijo(new Nodo("{",""));
+        let hijo4 = new Nodo("instrruciones","");
+        for(let inst of this.list_instruciones){
+
+            hijo4.AddHijo(inst.recorrer());
+
+        }
+        padre.AddHijo(hijo4);
+        return padre;
     }
 }

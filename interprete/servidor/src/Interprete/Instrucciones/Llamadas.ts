@@ -36,6 +36,7 @@ export default class Llamada implements Instruccion, Expresion{
         if(ts.existe(this.identificador)){
             //2. Crear una nueva tabla de símbolos la cual será local.
             let ts_local = new TablaSimbolos(ts);
+            controlador.lista_ts.push(ts_local);
             //3. obtener el simbolo del metodo 
             let simbolo_funcion = ts.getSimbolo(this.identificador)  as Funciones;
 
@@ -62,6 +63,7 @@ export default class Llamada implements Instruccion, Expresion{
         if(ts.existe(this.identificador)){
             //2. Crear una nueva tabla de símbolos la cual será local.
             let ts_local = new TablaSimbolos(ts);
+            controlador.lista_ts.push(ts_local);
             //3. obtener el simbolo del metodo 
             let simbolo_funcion = ts.getSimbolo(this.identificador)  as Funciones;
             let esmetodo=simbolo_funcion.metodo;
@@ -185,7 +187,22 @@ export default class Llamada implements Instruccion, Expresion{
 
 
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        let padre= new Nodo("LLamada","");
+        padre.AddHijo(new Nodo(this.identificador,""));
+        padre.AddHijo(new Nodo("(",""));
+        if(this.parametros.length>0){
+            let hijo_params= new Nodo("L_parametros","");
+            for(let parametro of this.parametros){
+
+                hijo_params.AddHijo(parametro.recorrer());
+                
+            }
+            padre.AddHijo(hijo_params);
+            
+        }
+        padre.AddHijo(new Nodo(")",""));
+
+        return padre;
     } 
     getSize(controlador:Controlador,ts:TablaSimbolos):number{
 

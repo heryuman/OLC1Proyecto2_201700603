@@ -101,7 +101,23 @@ if(ts.existe(this.id_list)){
 
 recorrer():Nodo{
 
-    throw new Error("")
+    let padre= new Nodo("Set_list","");
+    padre.AddHijo(new Nodo("SetValue",""));
+    padre.AddHijo(new Nodo("(",""));
+    let hijo1=new Nodo("id_lista","");
+    hijo1.AddHijo(new Nodo(this.id_list,""));
+    padre.AddHijo(hijo1);
+    padre.AddHijo(new Nodo(",",""));
+    let hijo2= new Nodo("posicion","");
+    hijo2.AddHijo(this.index.recorrer());
+    padre.AddHijo(new Nodo(",",""));
+    let hijo3= new Nodo("Nuevo_valor","");
+    hijo3.AddHijo(this.nVal.recorrer());
+    padre.AddHijo(hijo3);
+    padre.AddHijo(new Nodo(")",""));
+    padre.AddHijo(new Nodo(";",""));
+
+    return padre;
 }
 
 }

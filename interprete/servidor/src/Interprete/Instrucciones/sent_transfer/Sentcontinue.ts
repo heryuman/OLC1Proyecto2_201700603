@@ -19,7 +19,11 @@ export default class Continue implements Instruccion{
 
     recorrer():Nodo{
 
-        throw new Error("Metodo recorres");
+        let padre= new Nodo("Sent_Continue","");
+        padre.AddHijo(new Nodo("Continue",""));
+        padre.AddHijo(new Nodo(";",""));
+
+        return padre;
     }
 
     

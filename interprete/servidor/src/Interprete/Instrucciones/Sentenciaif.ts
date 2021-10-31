@@ -32,10 +32,10 @@ export default class Sentenciaif implements Instruccion {
     ejecutar(controlador:Controlador, ts:TablaSimbolos){
      
         let ts_local = new TablaSimbolos(ts);
-
+        controlador.lista_ts.push(ts_local);
         let valor_condicion = this.condicion.getValor(controlador, ts);
 
-        if(this.condicion.getTipo(controlador, ts) == tipo.BOOLEANO ||this.condicion.getTipo(controlador, ts) == tipo.ENTERO || this.condicion.getTipo(controlador, ts) == tipo.DOBLE || this.condicion.getTipo(controlador, ts) == tipo.CADENA || tipo.CARACTER){
+        if(this.condicion.getTipo(controlador, ts) == tipo.BOOLEANO ){
             if(valor_condicion){
                 for(let ins of this.listaIfs){
                     let res = ins.ejecutar(controlador, ts_local);
@@ -114,8 +114,36 @@ export default class Sentenciaif implements Instruccion {
     }
 
     recorrer():Nodo{
+       
+        let padre =new Nodo("Sent_control","");
+        padre.AddHijo(new Nodo("If",""));
+        padre.AddHijo(new Nodo("(",""));
+        let hijo = new Nodo("Condicion","");
+        hijo.AddHijo(this.condicion.recorrer());
+        padre.AddHijo(hijo);
+        padre.AddHijo(new Nodo(")",""));
+        padre.AddHijo(new Nodo("{",""));
+        let hijo2= new Nodo("Instrucciones","");
+        for(let inst of this.listaIfs){
 
-        throw new Error("Metodo no implementado");
+            hijo2.AddHijo(inst.recorrer());
+
+        }
+        padre.AddHijo(hijo2);
+        padre.AddHijo(new Nodo("}",""));
+        if(this.listaElses.length>0){
+            
+            let hijo3= new Nodo("Else","");
+           
+
+            for(let ins of this.listaElses){
+
+                hijo3.AddHijo(ins.recorrer());
+            }
+            padre.AddHijo(hijo3);
+        }
+      
+        return padre;
 
     }
 

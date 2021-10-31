@@ -310,7 +310,13 @@ export default class Nativas implements Expresion{
 
     recorrer():Nodo{
 
-        throw new Error("error en Nativas");
+        let padre= new Nodo("Func_nativa","");
+        padre.AddHijo(new Nodo(this.func_nativa,""));
+        padre.AddHijo(new Nodo("(",""));
+        padre.AddHijo(this.exp.recorrer());
+        padre.AddHijo(new Nodo(")",""));
+
+        return padre;
     }
 
     getSize(controlador:Controlador,ts:TablaSimbolos):number{

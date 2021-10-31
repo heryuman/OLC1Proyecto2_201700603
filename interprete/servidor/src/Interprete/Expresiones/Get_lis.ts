@@ -105,7 +105,8 @@ export default class Get_list implements Expresion{
                     let lalista=simbolo.valor.lista;
 
                     if(val_index < lalista.length){
-
+                    /// getValue(this.id_lista,thi.index)
+                  //    getvalue(id,val_index)
                         let val_acceso=lalista[val_index];
                        // console.log("el valor retornado lista "+val_acceso)
                         return val_acceso;
@@ -142,7 +143,21 @@ export default class Get_list implements Expresion{
 
     recorrer():Nodo{
 
-        throw new Error("")
+        let padre= new Nodo("Get_list","");
+        padre.AddHijo(new Nodo("GetValue",""));
+        padre.AddHijo(new Nodo("(",""));
+        let hijo= new Nodo("id_lista","");
+        hijo.AddHijo(new Nodo(this.id_lista,""));
+        padre.AddHijo(hijo);
+        padre.AddHijo(new Nodo(",",""));
+        let hijo2= new Nodo("posicion","");
+        hijo2.AddHijo(this.index.recorrer());
+        padre.AddHijo(hijo2);
+        padre.AddHijo(new Nodo(")",""));
+        
+        return padre;
+
+
     }
 
     getSize(controlador:Controlador,ts:TablaSimbolos):number{

@@ -95,7 +95,16 @@ export default class Setvector implements Instruccion{
 
     recorrer():Nodo{
 
-        throw new Error("")
+        let padre= new Nodo("Set_vector","");
+        padre.AddHijo(new Nodo(this.id_vector,""));
+        padre.AddHijo(new Nodo("[",""));
+        padre.AddHijo(this.index.recorrer());
+        padre.AddHijo(new Nodo("]",""));
+        padre.AddHijo(new Nodo("=",""));
+        padre.AddHijo(this.nValor.recorrer());
+        padre.AddHijo(new Nodo(";",""));
+
+        return padre;
     }
 
 

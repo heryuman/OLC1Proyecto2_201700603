@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" type="text/css" href=".//css/estyle.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
+    <link rel="stylesheet" href="node_modules/codemirror/theme/darcula.css">
+    
+    <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
+    <title>Interprete</title>
+</head>
+<body class="body" style="background-color: #bd9f1bd0;" >
+    <nav  class="navbar navbar-expand-lg navbar-light" style="background-color: #040505ad;">
+        <div class="container-fluid">
+            
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <button class="btn btn-success boton btn_space" onclick="compilar()">Compilar</button>
+                <button class="tablink boton btn_space btn btn-info " onclick="openPage('TablaSim')">T_Simbolos</button>
+                <button class="tablink boton btn_space btn btn-danger" onclick="openPage('Errores')">Reporte Errores</button>
+                <button class="tablink btn btn-warning boton btn_space" onclick="openPage('AST')">AST</button>
+                <button class="btn btn-dark boton btn_space" id="Guardar" type="submit">Guardar</button>
+                <input class="btn btn-primary" type="file" id="file-input" />
+            </ul>
+          </div>
+    </nav >
+    <div class="col-auto">
+        
+        <br>
+        <div>
+            <div class="form-floating " rows="10" cols="40" style="height:300px; width: 75%;"  >
+                <textarea class="editor" id="myEditor" name="myEditor"></textarea>
+            </div>
+        </div>
+
+        <br>
+        <div class="row justify-content-end">
+            <div class="col-3">
+                
+            </div>
+        </div>
+        <br>
+
+        <div class="consola">
+            <div class="form-floating">
+                <textarea class="console" id="consola" >console$:</textarea>
+            </div>
+        </div> 
+        <br><br>
+
+        
+  
+    
+        <div id="TablaSim" class="tabcontent" style="background-color: #1e252915;">
+          <table class="table table-striped table-dark" id= "tablasimbols" style="width:100%" bordered="true">
+      
+          </table>
+        </div>
+
+        <div id="AST" class="tabcontent" style="background-color: #06141d60;">
+          <div id="graph" style="text-align: center;"></div>
+        </div>
+
+        <div id="Errores" class="tabcontent" style="background-color: #06141d60;">
+          <table class="table table-striped table-dark" id= "Errores" style="width:100%" bordered="true"></table>
+        </div>
+       
+    
+      <br><br>
+    </div>
+    <script src="js/funcionalidad.js"></script>
+    <script src="node_modules/codemirror/lib/codemirror.js"></script> 
+    <script src="node_modules/codemirror/mode/javascript/javascript.js"></script>
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/@hpcc-js/wasm@0.3.11/dist/index.min.js"></script>
+    <script src="https://unpkg.com/d3-graphviz@3.0.5/build/d3-graphviz.js"></script>
+    
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("myEditor"), {
+          lineNumbers: true,  
+          styleActiveLine: true,  
+          matchBrackets: true,
+          theme : "darcula",
+        });
+        editor.setValue(`//PROYECTO2 COMPI 1`);
+      </script>
+</body>
+</html>

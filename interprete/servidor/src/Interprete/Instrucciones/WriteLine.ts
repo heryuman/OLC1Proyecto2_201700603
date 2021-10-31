@@ -24,9 +24,9 @@ export default class WriteLine implements Instruccion{
     ejecutar(controlador:Controlador,ts:TablaSimbolos){
 
         let tipo_valor= this.expresion.getTipo(controlador,ts);
-        if(tipo_valor==tipo.ENTERO || tipo_valor==tipo.DOBLE || tipo_valor== tipo.CARACTER ||tipo_valor== tipo.CADENA || tipo_valor == tipo.BOOLEANO || tipo_valor == tipo.VECTOR){
+        if(tipo_valor==tipo.ENTERO || tipo_valor==tipo.DOBLE || tipo_valor== tipo.CARACTER ||tipo_valor== tipo.CADENA || tipo_valor == tipo.BOOLEANO ){
 
-            console.log("en wl tipo de exp= "+tipo_valor)
+            //console.log("en wl tipo de exp= "+tipo_valor)
             let valor= this.expresion.getValor(controlador,ts);
             controlador.append(valor);
         }else{
@@ -38,7 +38,13 @@ export default class WriteLine implements Instruccion{
     }
 
     recorrer():Nodo{
-        throw new Error("Method not implemented.");
+        let padre = new Nodo("print","");
+        padre.AddHijo(new Nodo("Writeline",""));
+        padre.AddHijo(new Nodo("(",""));
+        padre.AddHijo(this.expresion.recorrer());
+        padre.AddHijo(new Nodo(")",""));
+
+        return padre;
     }
 
 }

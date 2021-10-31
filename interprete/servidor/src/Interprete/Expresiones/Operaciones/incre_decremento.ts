@@ -62,7 +62,7 @@ export default class incre_decremento implements Expresion {
 
     }
     recorrer(): Nodo {
-        throw new Error("Method not implemented.");
+        throw new Error("")
     }
     
     getSize(controlador:Controlador,ts:TablaSimbolos):number{

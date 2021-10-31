@@ -1,4 +1,5 @@
 import Errores from "../../Ast/Errores";
+import Nodo from "../../Ast/Nodo";
 import Controlador from "../../Controlador";
 import { Expresion } from "../../Interfaces/Expresion";
 import TablaSimbolos from "../../TablaSimbolos/TablaSimbolos";
@@ -172,6 +173,23 @@ export default class Logica extends Operacion implements Expresion{
                 break;
         }
 
+    }
+
+    recorrer():Nodo{
+
+        let padre = new Nodo("Exp","");
+        if(this.expU){
+
+            padre.AddHijo(new Nodo(this.sign_operador,""));
+            padre.AddHijo(this.exp1.recorrer());
+
+        }else{
+
+            padre.AddHijo(this.exp1.recorrer());
+            padre.AddHijo(new Nodo(this.sign_operador,""));
+            padre.AddHijo(this.exp2.recorrer());
+        }
+        return padre;
     }
 
     getSize(controlador:Controlador,ts:TablaSimbolos):number{

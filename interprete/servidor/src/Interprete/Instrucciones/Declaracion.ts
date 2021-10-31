@@ -40,29 +40,31 @@ export default class Declaracion implements Instruccion{
                 continue;
 
             }
+            if(this.expresion != null){
+                let tipo_valor = this.expresion.getTipo(controlador, ts); //ENTERO
+                let valor = this.expresion.getValor(controlador,ts); //0
 
-                
-            if (this.expresion != null){
-
-                let tipo_valor= this.expresion.getTipo(controlador,ts);//indica si es entero, bool, doble,etc
-//console.log("el tipo de la expresion de la declaracion"+tipo_valor);
-                let valor= this.expresion.getValor(controlador,ts);//0 o true, 1.4
-                
-                if(tipo_valor==this.type.enum_tipo){
-                    let nuev_simbolo=new Simbolo(1,this.type,id,valor);
-                    ts.agregar(id,nuev_simbolo);
+                if(tipo_valor == this.type.enum_tipo) {
+                    let nuevo_simbolo = new Simbolo(1, this.type, id, valor);
+                    ts.agregar(id, nuevo_simbolo);
                 }else{
-                    let error = new Errores("Semantico", `El valor de ${id}, no corresponde al tipo declarado.`, this.linea, this.columna);
-                    controlador.errores.push(error);
-                    controlador.append(` *** ERROR: Semantico, el valor de ${id},no corresponde al tipo declarado, en la fila ${this.linea} y columna ${this.columna}`);
-                    
-
+                    //tomamos en cuenta los casteos implicitos que pueden existir
+                    if(this.type.enum_tipo == tipo.DOBLE && tipo_valor == tipo.ENTERO){
+                        let nuevo_simbolo = new Simbolo(1, this.type, id, valor);
+                        ts.agregar(id, nuevo_simbolo); 
+                    }else if(this.type.enum_tipo == tipo.ENTERO && tipo_valor == tipo.DOBLE){
+                        let nuevo_simbolo = new Simbolo(1, this.type, id, Math.trunc(valor));
+                        //el Math.trunc devolvera el valor entero por ejemplo: int x=9.8; devolvera int x=9; 
+                        ts.agregar(id, nuevo_simbolo);
+                    }else{
+                        let error = new Errores("Semantico",` La variable ${id} tiene valor ${valor} y por eso  no coinciden.`, this.linea, this.columna);
+                        controlador.errores.push(error);
+                        controlador.append( `*** ERROR: Semántico, La variable ${id} tiene valor ${valor} y por eso  no coinciden. En la línea ${this.linea} y columna ${this.columna}`); 
+                    }
                 }
             }else{
-                //en esta seccion se agregan valores por defecto a las declaraciones
                 let nuevo_simbolo = new Simbolo(1, this.type, id, null);
                 ts.agregar(id, nuevo_simbolo);
-                 
                 if(this.type.enum_tipo == tipo.ENTERO){
                     nuevo_simbolo.setValor(0);
                 }else if(this.type.enum_tipo == tipo.DOBLE){
@@ -75,13 +77,34 @@ export default class Declaracion implements Instruccion{
                     nuevo_simbolo.setValor('0');
                 }
             }
+                
+           
 
         }
         return null;
     }
     recorrer():Nodo{
 
-        throw new Error("Metodo no implementado");
+        let padre = new Nodo("Declaracion","");
+        let hijo= new Nodo("Tipo","");
+        hijo.AddHijo(new Nodo(this.type.nombre_tipo,""))
+        padre.AddHijo(hijo);
+        for (let id of this.lista_ids){
+            let hijo2= new Nodo("identificador","");
+            hijo2.AddHijo(new Nodo(id,""))
+            padre.AddHijo(hijo2);
+        }
+        if(this.expresion!= null){
+
+            padre.AddHijo(new Nodo("=",""));
+            padre.AddHijo(this.expresion.recorrer());
+            padre.AddHijo(new Nodo(";",""));
+        }else{
+
+            padre.AddHijo(new Nodo(";",""));
+        }
+
+        return padre;
     }
 
 }

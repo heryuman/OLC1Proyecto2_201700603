@@ -1,0 +1,14 @@
+version: "3.9"
+
+services: 
+    app:
+      build: ./interprete/servidor
+      container_name: servidor-olc1-201700603
+      ports:
+      - "3000:3000"
+    web: 
+      build: ./cliente
+      container_name: cliente-olc1-201700603
+      restart: always
+      ports:
+        - "8080:80"

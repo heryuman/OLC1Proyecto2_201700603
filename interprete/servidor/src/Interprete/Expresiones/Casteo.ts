@@ -160,7 +160,16 @@ export default class Casteo implements Expresion {
 
     recorrer():Nodo{
 
-         throw new Error("un error en casteo");
+         let padre= new Nodo("Casteo","");
+         padre.AddHijo(new Nodo("(",""));
+         let hijo= new Nodo("Tipo","");
+         hijo.AddHijo(new Nodo(this.type.nombre_tipo,""));
+         padre.AddHijo(hijo);
+         padre.AddHijo(new Nodo(")",""));
+         padre.AddHijo(this.exp.recorrer());
+
+         return padre;
+
     }
 
     getSize(controlador:Controlador,ts:TablaSimbolos):number{

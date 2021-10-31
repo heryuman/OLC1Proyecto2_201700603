@@ -176,7 +176,33 @@ constructor(tipo_declaracion:number,tipo_vector:Tipo,id_vector:string,exp:any,li
 
  recorrer():Nodo{
 
-    throw new Error("error en decla_vec")
+    let padre = new Nodo("Decla_Vector","");
+    padre.AddHijo(new Nodo(this.tipo_vector.nombre_tipo,""));
+    padre.AddHijo(new Nodo(this.id_vector,""));
+    padre.AddHijo(new Nodo("[",""));
+    padre.AddHijo(new Nodo("]",""));
+    padre.AddHijo(new Nodo("=",""));
+    if(this.tipo_declaracion==1){
+        padre.AddHijo(new Nodo("new",""));
+        padre.AddHijo(new Nodo(this.tipo_vector.nombre_tipo,""));
+        padre.AddHijo(new Nodo("[",""));
+        padre.AddHijo(this.exp.recorrer());
+        padre.AddHijo(new Nodo("]",""));
+        
+    }else{
+
+        padre.AddHijo(new Nodo("{",""));
+        let hijo= new Nodo("Exp_list","");
+        for (let exp of this.exp){
+
+            hijo.AddHijo(exp.recorrer());
+            hijo.AddHijo(new Nodo(",",""));
+        }
+        padre.AddHijo(hijo);
+
+    }
+    
+    return padre;
 
  }
 
